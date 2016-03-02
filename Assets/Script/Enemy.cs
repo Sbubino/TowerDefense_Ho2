@@ -36,12 +36,14 @@ public class Enemy : MonoBehaviour {
 
     void  SetNextTile()
     {
-        for(int i = 0; i<possibleTilePosition.Length; i++)
+
+        for (int i = 0; i<possibleTilePosition.Length; i++)
         {
 
             if (possibleTilePosition[i] != Vector3.zero && possibleTilePosition[i] != lastTile)
             {
                 nextTile = possibleTilePosition[i];
+                break;
             }
                 
         }
@@ -58,7 +60,14 @@ public class Enemy : MonoBehaviour {
 
             if (hit1.collider != null)
             {
+                
+
+                currentTile = hit1.transform.position;
+
                 nextTile = hit1.collider.GetComponent<Switch>().GetNextTilePosition();
+
+                
+                
 
 
             }
@@ -111,7 +120,7 @@ public class Enemy : MonoBehaviour {
 
     void Move()
     {
-        
+
         // transform.Translate(Vector3.zero);
         transform.position =  Vector2.Lerp(transform.position, nextTile, Speed * Time.deltaTime);  
         //transform.Translate(nextTile * Time.deltaTime * Speed);

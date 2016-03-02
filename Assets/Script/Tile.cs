@@ -33,7 +33,7 @@ public class Tile : MonoBehaviour {
         {
             if (nextTile[i].collider.gameObject != this.gameObject)
             {
-                if (Vector3.Distance(transform.position, nextTile[i].transform.position) < 1.3)
+                if (Vector3.Distance(transform.position, nextTile[i].transform.position) < 1.2)
                 {
                     for (int j = 0; j < positionNextTile.Length; j++)
                     {
