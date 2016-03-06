@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour {
     public float Speed;
     public float distance = 1.8f;
     public int AddEnergy;
-	int currentLife;
+    int currentLife;
     Vector3[] possibleTilePosition;
     Vector3 nextTile;
     Vector3 currentTile;
@@ -131,6 +131,11 @@ public class Enemy : MonoBehaviour {
         nextTile = spawn;
 //        GameController.instance.LoseEnergy(banishmentCost);
         
+    }
+
+    public void GetSlow(float slow)
+    {
+        Speed /= slow;
     }
 
     void OnDisable()

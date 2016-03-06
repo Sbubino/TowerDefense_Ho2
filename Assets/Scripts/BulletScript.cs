@@ -8,6 +8,7 @@ public class BulletScript : MonoBehaviour {
 	public int dam;
 	[HideInInspector]
 	public float raggio;
+	public float slowAmount;
 
 
 
@@ -21,9 +22,13 @@ public class BulletScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		SetRange ();
+
+
 	}
 	void OnCollisionEnter2D(Collision2D col){
 		if(col.gameObject.tag=="Enemy" && TurretBehaviour.isExp==true){
+
+
 			Debug.Log ("collisione avvenuta");
 			explosionRange.SetActive(true);
 			gameObject.GetComponent<Rigidbody2D>().velocity=Vector2.zero;
@@ -33,22 +38,30 @@ public class BulletScript : MonoBehaviour {
 
 				explosionRange.SetActive (false);
 				timer=0;
-
 			}
 
 		}
 		if (col.gameObject.tag == "Enemy" && TurretBehaviour.isFast == true) {
 			col.gameObject.GetComponent<Enemy>().TakeDamage(dam);
-			Destroy (gameObject);
+			Destroy (this.gameObject);
+		}
+		if (col.gameObject.tag == "Enemy" && TurretBehaviour.isHeavy == true) {
+			col.gameObject.GetComponent<Enemy>().TakeDamage(dam);
+			Destroy (this.gameObject);
+		}
+		if (col.gameObject.tag == "Enemy" && TurretBehaviour.isSl == true) {
+			col.gameObject.GetComponent<Enemy>().TakeDamage(dam);
+			col.gameObject.GetComponent<Enemy>().GetSlow(slowAmount);
+			Destroy (this.gameObject);
 		}
 	}
-	/*void OnTriggerEnter2D(Collider2D trig){
+	void OnTriggerEnter2D(Collider2D trig){
 		if (trig.gameObject.tag == "Enemy") {
 			trig.gameObject.GetComponent<Enemy>().TakeDamage(dam);
 
 		}
 
-	}*/
+	}
 	void SetRange(){
 		explosionRange.GetComponent<CircleCollider2D> ().radius = raggio;
 	}
@@ -62,5 +75,8 @@ public class BulletScript : MonoBehaviour {
 		dam=amount;
 
 
+	}
+	public void SetSlow(float slowVal){
+		slowAmount=slowVal;
 	}
 }
