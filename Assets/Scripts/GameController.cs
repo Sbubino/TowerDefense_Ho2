@@ -3,111 +3,79 @@ using System.Collections;
 
 public class GameController : MonoBehaviour {
 
+	public static GameController instance;
+
 	public Transform spawnPoint;
-
-	int indexEnemy = 0;
-	public GameObject[] Wave1;
-	public GameObject[] Wave2;
-	public GameObject[] Wave3;
-	bool wave1SetActive = true;
-	bool wave2SetActive = false;
-	bool wave3SetActive = false;
-
 	public float nextWaveIn;
+	public int maxWaveNumber;
 
-	public float wave1spawnTime;
-	public float wave2spawnTime;
-	public float wave3spawnTime;
+	public float moltiplicatoreEnergy;
+	public int maxEnergy;
+
+	GameObject[] wave;
+	int nextWaveControl = 0;
+	int indexWave = 0;
+	int localWaveIndex = 0;
 	float waveTimer;
 
-	//GameObject[] enemyA;
-	//GameObject[] enemyB;
+	float currentEnergy;
 
-	void Start () {
-		//enemyA = GameObject.FindGameObjectsWithTag ("EnemyA");
-		//enemyB = GameObject.FindGameObjectsWithTag ("EnemyB");
+
+	void Awake() {
+		instance = this;	
+
+		moltiplicatoreEnergy = 1f;
+		currentEnergy = maxEnergy;
+		waveTimer = 100;
+		wave = GameObject.FindGameObjectsWithTag ("Enemy");
 	}
 	
-	// Update is called once per frame
+
 	void Update () {
-		SpawnMinionWave1 ();
-		SpawnMinionWave2 ();
-		SpawnMinionWave3 ();
-
-		//Debug.Log (" wave1SetActive" + wave1SetActive);
-		//Debug.Log (" wave2SetActive" + wave2SetActive);
-		//Debug.Log (" wave3SetActive" + wave3SetActive);
+		WaveControl ();
 	}
 
 
-	public void SpawnMinionWave1(){
-		if (wave1SetActive){
-		    waveTimer += Time.deltaTime;
 
-			if (waveTimer >= wave1spawnTime) {
-
-				Wave1 [indexEnemy].transform.position = new Vector2 (spawnPoint.position.x, spawnPoint.position.y);	
-				Wave1 [indexEnemy].SetActive (true);
-
-				indexEnemy++;
-				waveTimer = 0;
-
-				if (indexEnemy == Wave1.Length) {
-					wave1SetActive = false;
-					StartCoroutine (StartWave2 ());
-				}
-			}
-	    }
+	public void LoseEnergy (int costo){
+		currentEnergy -= costo;
+	}
+	public void TakeEnergy (int incremento){
+		currentEnergy = currentEnergy + (Mathf.Round(incremento) * moltiplicatoreEnergy);
 	}
 
-	public IEnumerator StartWave2(){
-		yield return new WaitForSeconds (nextWaveIn);
-		wave2SetActive = true;
-		indexEnemy = 0;
+	public void EnergyControl (){
+		if (currentEnergy > maxEnergy)
+			currentEnergy = maxEnergy;
+		//aumenta con il tempo
 	}
+	  
 
-	public void SpawnMinionWave2(){
-		if (wave2SetActive){
-			waveTimer += Time.deltaTime;
 
-			if (waveTimer >= wave2spawnTime) {
-
-				Wave2 [indexEnemy].transform.position = new Vector2 (spawnPoint.position.x, spawnPoint.position.y);	
-				Wave2 [indexEnemy].SetActive (true);
-
-				indexEnemy++;
-				waveTimer = 0;
-
-				if (indexEnemy == Wave2.Length) {
-					wave2SetActive = false;
-					StartCoroutine (StartWave3 ());
-				}
-			}
+	void StartNextWave(){		
+		if (localWaveIndex < wave.Length) {
+			wave [localWaveIndex].GetComponent<Wave> ().activator++;
+			localWaveIndex++;
 		}
 	}
+	void SetNextWave(){
+		waveTimer += Time.deltaTime;
 
-	public IEnumerator StartWave3(){
-		yield return new WaitForSeconds (nextWaveIn);
-		wave3SetActive = true;
-		indexEnemy = 0;
-	}
-
-	public void SpawnMinionWave3(){
-		if (wave3SetActive){
-			waveTimer += Time.deltaTime;
-
-			if (waveTimer >= wave3spawnTime) {
-
-				Wave3 [indexEnemy].transform.position = new Vector2 (spawnPoint.position.x, spawnPoint.position.y);	
-				Wave3 [indexEnemy].SetActive (true);
-
-				indexEnemy++;
-				waveTimer = 0;
-
-				if (indexEnemy == Wave3.Length) {
-					wave3SetActive = false;
-				}
-			}
+		if (waveTimer >= nextWaveIn) {			
+			indexWave++;
+			waveTimer = 0;
 		}
+	}
+	void WaveControl(){
+		SetNextWave();
+
+		if (nextWaveControl < indexWave) {
+			StartNextWave ();
+			nextWaveControl = indexWave;	
+		}
+
+		if (indexWave >= maxWaveNumber)
+			//carica la fine
+			Debug.Log ("Ciao");
 	}
 }
