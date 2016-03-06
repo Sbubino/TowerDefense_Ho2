@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Tile : MonoBehaviour {
-   
+
 
     Vector3 nucleus;
     Vector3[] positionNextTile;
@@ -23,7 +23,7 @@ public class Tile : MonoBehaviour {
     
     void SetNextTilePosition()
     {
-        nextTile = Physics2D.BoxCastAll(transform.position, new Vector2(transform.localScale.x, transform.localScale.y), 0f, new Vector2(), 0f, walkableTileMask);
+        nextTile = Physics2D.BoxCastAll(transform.position, new Vector2(transform.localScale.x + 0.5f , transform.localScale.y + 0.5f), 0f, new Vector2(), 0f, walkableTileMask);
 
         positionNextTile = new Vector3[nextTile.Length];
         
@@ -33,7 +33,7 @@ public class Tile : MonoBehaviour {
         {
             if (nextTile[i].collider.gameObject != this.gameObject)
             {
-                if (Vector3.Distance(transform.position, nextTile[i].transform.position) < 1.2)
+                if (Vector3.Distance(transform.position, nextTile[i].transform.position) < 1.9)
                 {
                     for (int j = 0; j < positionNextTile.Length; j++)
                     {
