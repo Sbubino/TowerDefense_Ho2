@@ -35,7 +35,13 @@ public class Enemy : MonoBehaviour {
     }
 
 
-
+    void Update()
+    {
+        if(currentLife <= 0)
+        {
+            Die();
+        }
+    }
 
     void  SetNextTile()
     {
@@ -141,5 +147,9 @@ public class Enemy : MonoBehaviour {
     void OnDisable()
     {
    //     GameController.instance.TakeEnergy(AddEnergy);
+    }
+    void Die()
+    {
+        gameObject.SetActive(false);
     }
 }
