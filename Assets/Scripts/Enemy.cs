@@ -35,13 +35,7 @@ public class Enemy : MonoBehaviour {
     }
 
 
-    void Update()
-    {
-        if(currentLife <= 0)
-        {
-            Die();
-        }
-    }
+
 
     void  SetNextTile()
     {
@@ -127,13 +121,14 @@ public class Enemy : MonoBehaviour {
     public void TakeDamage(int amount)
     {
         currentLife -= amount;
+		if(currentLife <= 0){ 
+			this.gameObject.SetActive(false);
+		}
     }
 
     public void Banishment()
-    {
-        
+    {        
         transform.position = spawn;
-        Debug.Log("Jesoos is great");
         nextTile = spawn;
 //        GameController.instance.LoseEnergy(banishmentCost);
         
@@ -148,8 +143,10 @@ public class Enemy : MonoBehaviour {
     {
    //     GameController.instance.TakeEnergy(AddEnergy);
     }
-    void Die()
-    {
-        gameObject.SetActive(false);
-    }
+
+	public void OnTriggerEnter2D(Collider2D col){
+		if(col.gameObject.tag == "SecondWaveactivator"){
+			GameController.instance.currentMinionPassed ++;
+		}
+	}
 }

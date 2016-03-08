@@ -28,7 +28,9 @@ public class TurretBehaviour : MonoBehaviour {
 
 
 
+	void Awake(){
 
+	}
 	// Use this for initialization
 	void Start () {
 		damageRefer = turretDamage;
@@ -36,14 +38,14 @@ public class TurretBehaviour : MonoBehaviour {
 		isExp = explosionT;
 		isFast=fastT;
 		isHeavy=heavyT;
-	
+
 
 
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		gameObject.GetComponent<CircleCollider2D> ().radius = range;
 		timer += Time.deltaTime;
 		//Debug.Log ("timer: " + timer);
 	
@@ -60,12 +62,10 @@ public class TurretBehaviour : MonoBehaviour {
 			
 			if (timer>=fireRate) {
 
-				Debug.Log ("stai sparando!");
 				GameObject bulletInstance;
 				bulletInstance = Instantiate (bulletPrefab, spawnPoint.transform.position, bulletPrefab.transform.rotation)as GameObject;
-				bulletInstance.GetComponent<Rigidbody2D>().AddForce(transform.right *forceToBullet);
 				bulletInstance.GetComponent<BulletScript>().SetDamage(turretDamage);
-				
+				bulletInstance.GetComponent<BulletScript>().target = trig.gameObject;
 				Destroy (bulletInstance, 3);
 				timer=0;
 			}
@@ -81,8 +81,7 @@ public class TurretBehaviour : MonoBehaviour {
 			
 			
 			if (timer>=fireRate) {
-				
-				Debug.Log ("stai sparando!");
+
 				GameObject bulletInstance;
 				bulletInstance = Instantiate (bulletPrefab, spawnPoint.transform.position, bulletPrefab.transform.rotation)as GameObject;
 				bulletInstance.GetComponent<Rigidbody2D>().AddForce(transform.right *forceToBullet);
@@ -103,8 +102,7 @@ public class TurretBehaviour : MonoBehaviour {
 			
 			
 			if (timer>=fireRate) {
-				
-				Debug.Log ("stai sparando!");
+
 				GameObject bulletInstance;
 				bulletInstance = Instantiate (bulletPrefab, spawnPoint.transform.position, bulletPrefab.transform.rotation)as GameObject;
 				bulletInstance.GetComponent<Rigidbody2D>().AddForce(transform.right *forceToBullet);
@@ -124,8 +122,7 @@ public class TurretBehaviour : MonoBehaviour {
 			
 			
 			if (timer>=fireRate) {
-				
-				Debug.Log ("stai sparando!");
+
 				GameObject bulletInstance;
 				bulletInstance = Instantiate (bulletPrefab, spawnPoint.transform.position, bulletPrefab.transform.rotation)as GameObject;
 				bulletInstance.GetComponent<Rigidbody2D>().AddForce(transform.right *forceToBullet);
@@ -139,6 +136,7 @@ public class TurretBehaviour : MonoBehaviour {
 		}
 		
 	}
+
 	void IsFast(){
 
 	}
@@ -151,10 +149,4 @@ public class TurretBehaviour : MonoBehaviour {
 	void IsExplosion(){
 		
 	}
-
-
-		
-
-
-
 }
