@@ -7,14 +7,20 @@ public class Tile : MonoBehaviour {
     Vector3 nucleus;
     Vector3[] positionNextTile;
     RaycastHit2D[] nextTile;
-    LayerMask walkableTileMask;
+    public LayerMask walkableTileMask;
 
 
     void Awake()
     {
         walkableTileMask = 1 << 8;
+        
         SetNextTilePosition();
 
+    }
+
+    void Start()
+    {
+       
 
     }
 
@@ -33,7 +39,7 @@ public class Tile : MonoBehaviour {
         {
             if (nextTile[i].collider.gameObject != this.gameObject)
             {
-                if (Vector3.Distance(transform.position, nextTile[i].transform.position) < 0.7f)
+                if (Vector3.Distance(transform.position, nextTile[i].transform.position) < 1.2f)
                 {
                     for (int j = 0; j < positionNextTile.Length; j++)
                     {
@@ -50,6 +56,7 @@ public class Tile : MonoBehaviour {
          }
      }
 
+    
 
 
     public void DebugPositionTile()
@@ -58,7 +65,7 @@ public class Tile : MonoBehaviour {
         {
             if(positionNextTile[i] != null)
             {
-                //Debug.Log("Piastrella n : " + i + "posizione : " + GetPositionNextTile()[i]);
+                Debug.Log("Piastrella n : " + i + "posizione : " + GetPositionNextTile()[i]);
             }
         }
     }

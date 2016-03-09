@@ -31,7 +31,7 @@ public class Enemy : MonoBehaviour {
        StartCoroutine("TakeTilePosition");
 		currentLife = m_MaxLife;
         spawn = transform.position;
-        Debug.Log(spawn);
+
     }
 
 
@@ -57,7 +57,7 @@ public class Enemy : MonoBehaviour {
     IEnumerator TakeTilePosition()
     {
         
-        while (Vector3.Distance(transform.position, nextTile) < 1)
+        while (Vector3.Distance(transform.position, nextTile) < 0.5)
         {
             RaycastHit2D hit1 = Physics2D.Raycast(transform.position, new Vector2(), 0f, m_SwitchMask, 0f, 2f);
 
@@ -114,7 +114,8 @@ public class Enemy : MonoBehaviour {
     {
 
         // transform.Translate(Vector3.zero);
-        transform.position =  Vector2.Lerp(transform.position, nextTile, (Speed * Time.fixedDeltaTime) / Vector2.Distance(transform.position, nextTile)) ;  
+
+        transform.position =  Vector2.Lerp(transform.position, nextTile, (Speed * Time.deltaTime) / Vector2.Distance(transform.position, nextTile)) ;  
         //transform.Translate(nextTile * Time.deltaTime * Speed);
     }
 
