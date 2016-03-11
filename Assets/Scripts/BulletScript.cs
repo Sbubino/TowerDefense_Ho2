@@ -22,7 +22,7 @@ public class BulletScript : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
 		SetRange ();
-		transform.position = Vector2.Lerp(transform.position , target.transform.position , speed * Time.deltaTime);
+		//transform.position = Vector2.Lerp(transform.position , target.transform.position , speed * Time.deltaTime);
 
 	}
 

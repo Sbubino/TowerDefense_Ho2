@@ -9,12 +9,17 @@ public class Enemy : MonoBehaviour {
     public float Speed;
     public float distance = 1.8f;
     public int AddEnergy;
+	bool inTurretRange;
+	float tileWalked = 0f;
+	int switchPriority = 0;
     int currentLife;
     Vector3[] possibleTilePosition;
     Vector3 nextTile;
     Vector3 currentTile;
     Vector3 lastTile;
     Vector3 spawn;
+	Vector3 lastPosition;
+
 
 
     void Awake()
@@ -22,7 +27,7 @@ public class Enemy : MonoBehaviour {
         possibleTilePosition = new Vector3[2];
         nextTile = transform.position;
 
-        
+		lastPosition = transform.position;        
     }
 
 
@@ -63,7 +68,7 @@ public class Enemy : MonoBehaviour {
 
             if (hit1.collider != null)
             {
-                
+				switchPriority++;
 
                 currentTile = hit1.transform.position;
 
@@ -146,8 +151,36 @@ public class Enemy : MonoBehaviour {
     }
 
 	public void OnTriggerEnter2D(Collider2D col){
-		if(col.gameObject.tag == "SecondWaveactivator"){
+		if(col.gameObject.tag == "SecondWaveactivator")
 			GameController.instance.currentMinionPassed ++;
-		}
+		
+		if (col.gameObject.tag == "Turret") 
+		    inTurretRange = true;
+	}
+
+	public void OnTriggerExit2D (Collider2D col){	
+		if (col.gameObject.tag == "Turret")
+			inTurretRange = false;	
+	}
+
+	void MovementDetection(){
+		//se il nemico è nel range di una torretta aumenta un contatore di distanza percorsa che viene poi resettato all'uscita
+		if (inTurretRange) {
+			tileWalked += Vector2.Distance (transform.position, lastPosition);
+			lastPosition = transform.position;
+		}	
+		if (!inTurretRange)
+			tileWalked = 0;		
+	}
+
+	public void Update(){
+		MovementDetection ();
+	}
+
+	public int ReturnTileValue(){
+		return Mathf.RoundToInt (tileWalked);
+	}
+	public int ReturnSwitchValue(){
+		return switchPriority;
 	}
 }
