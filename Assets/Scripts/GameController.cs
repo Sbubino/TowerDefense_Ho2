@@ -8,6 +8,7 @@ public class GameController : MonoBehaviour {
 	public Transform spawnPoint;
 	public Transform spawnPoint2;
 	public float nextWaveIn;
+	[HideInInspector]
 	public int maxWaveNumber;
 	public int minionForNextSpawnPoint;
 	[HideInInspector]
@@ -19,6 +20,7 @@ public class GameController : MonoBehaviour {
 	public int maxEnergy;
 
 	bool NextSpawnPoint = false;
+	GameObject waveHolder;
 	GameObject[] wave;
 	int nextWaveControl = 0;
 	int indexWave = 0;
@@ -34,10 +36,8 @@ public class GameController : MonoBehaviour {
 		//imposto i valori dell'energy iniziale
 		moltiplicatoreEnergy = 1f;
 		currentEnergy = maxEnergy;
-		//riempio l'array wave con tutte le ondate in scena e imposto un valore wavetimer alto per far partire subuto la prima ondata al play
-		waveTimer = 100;
-		wave2Timer = 100;
-		wave = GameObject.FindGameObjectsWithTag ("Wave");
+
+		WaveBuild ();	
 	}
 	
 
@@ -79,6 +79,19 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
+	void WaveBuild(){
+		//riempio l'array wave con tutte le ondate in scena e imposto un valore wavetimer alto per far partire subuto la prima ondata al play
+
+		waveTimer = 100;
+		wave2Timer = 100;
+		waveHolder = GameObject.FindGameObjectWithTag ("Wave");
+		wave = new GameObject[waveHolder.transform.childCount];
+		for (int i = 0; i < waveHolder.transform.childCount; i++) {
+			wave [i] = waveHolder.transform.GetChild (i).gameObject;
+		}
+		maxWaveNumber = wave.Length;
+	}
+
 	void SetNextWave(){
 		waveTimer += Time.deltaTime;
 		//periodicamente si attiva l'ondata successiva
@@ -101,9 +114,9 @@ public class GameController : MonoBehaviour {
 		}
 
 		//stabilisco la fine della partita 
-		if (indexWave >= maxWaveNumber)
+		//if (indexWave >= maxWaveNumber)
 			//carica la fine
-			Debug.Log ("Ciao");
+			
 	}
 
 	void SetSecondPoint(){ 
