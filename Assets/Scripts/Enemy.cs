@@ -9,7 +9,9 @@ public class Enemy : MonoBehaviour {
     public float Speed;
     public float distance = 1.8f;
     public int AddEnergy;
-	bool inTurretRange;
+
+
+    bool inTurretRange;
 	float tileWalked = 0f;
 	int switchPriority = 0;
     int currentLife;
@@ -19,6 +21,7 @@ public class Enemy : MonoBehaviour {
     Vector3 lastTile;
     Vector3 spawn;
 	Vector3 lastPosition;
+    GameObject lastTurret;
 
 
 
@@ -150,32 +153,34 @@ public class Enemy : MonoBehaviour {
    //     GameController.instance.TakeEnergy(AddEnergy);
     }
 
-	public void OnTriggerEnter2D(Collider2D col){
+	public void OnTriggerStay2D(Collider2D col){
 		if(col.gameObject.tag == "SecondWaveactivator")
 			GameController.instance.currentMinionPassed ++;
-		
-		if (col.gameObject.tag == "Turret") 
-		    inTurretRange = true;
+        if (col.gameObject.tag == "Turret" && lastTurret != col.gameObject)
+            tileWalked = 0;
+
+
+        if (col.gameObject.tag == "Turret")
+        {
+            
+            lastTurret = col.gameObject;
+            MovementDetection();
+        }
+
+
+
 	}
 
-	public void OnTriggerExit2D (Collider2D col){	
-		if (col.gameObject.tag == "Turret")
-			inTurretRange = false;	
-	}
+	
 
 	void MovementDetection(){
 		//se il nemico è nel range di una torretta aumenta un contatore di distanza percorsa che viene poi resettato all'uscita
-		if (inTurretRange) {
 			tileWalked += Vector2.Distance (transform.position, lastPosition);
 			lastPosition = transform.position;
-		}	
-		if (!inTurretRange)
-			tileWalked = 0;		
+	
 	}
 
-	public void Update(){
-		MovementDetection ();
-	}
+
 
 	public int ReturnTileValue(){
 		return Mathf.RoundToInt (tileWalked);
