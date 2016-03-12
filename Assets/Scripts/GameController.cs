@@ -8,16 +8,20 @@ public class GameController : MonoBehaviour {
 	public Transform spawnPoint;
 	public Transform spawnPoint2;
 	public float nextWaveIn;
+	public int minionForNextSpawnPoint;
 	[HideInInspector]
 	public int maxWaveNumber;
-	public int minionForNextSpawnPoint;
 	[HideInInspector]
 	public int currentMinionPassed;
 
-
-
+	public float EnergyUpTime;
+	public int EnergyUpValue;
+	public float nextEnergyTimeDecrease;
+	public float nextEnergyValueDecrease;
 	public float moltiplicatoreEnergy;
 	public int maxEnergy;
+	[HideInInspector]
+	public float currentEnergy;
 
 	bool NextSpawnPoint = false;
 	GameObject waveHolder;
@@ -28,14 +32,16 @@ public class GameController : MonoBehaviour {
 	float waveTimer;
 	float wave2Timer;
 
-	float currentEnergy;
+	float nextEnergyDecreaseTimer = 0;
+	float energyTimer = 0;
 
 
 	void Awake() {
 		instance = this;	
 		//imposto i valori dell'energy iniziale
 		moltiplicatoreEnergy = 1f;
-		currentEnergy = maxEnergy;
+		//currentEnergy = maxEnergy;
+		currentEnergy = 50;
 
 		WaveBuild ();	
 	}
@@ -43,6 +49,10 @@ public class GameController : MonoBehaviour {
 
 	void Update () {
 		WaveControl ();
+		EnergyControl ();
+
+		Debug.Log (currentEnergy);
+		Debug.Log ("Time" + EnergyUpTime);
 	}
 
 
@@ -54,12 +64,35 @@ public class GameController : MonoBehaviour {
 		currentEnergy = currentEnergy + (Mathf.Round(incremento) * moltiplicatoreEnergy);
 	}
 
-	public void EnergyControl (){
+	void EnergyControl (){
 		//aumenta con il tempo
+		energyTimer += Time.deltaTime;
+
+		if (energyTimer >= EnergyUpTime) {
+			currentEnergy += EnergyUpValue;
+			energyTimer = 0;
+		}
+
+		if (EnergyUpTime <= 0.5f)
+			EnergyUpTime = 0.5f;
+
+		NextEnergyTime ();
 
 		if (currentEnergy > maxEnergy)
 			currentEnergy = maxEnergy;
 	}	  
+
+	void NextEnergyTime(){
+		nextEnergyDecreaseTimer += Time.deltaTime;
+
+		if (nextEnergyDecreaseTimer >= nextEnergyTimeDecrease) {
+			EnergyUpTime -= nextEnergyValueDecrease ;
+			nextEnergyDecreaseTimer = 0;
+		}
+
+	}
+
+
 
 
 	void StartNextWave(bool OneOrTwo){	
