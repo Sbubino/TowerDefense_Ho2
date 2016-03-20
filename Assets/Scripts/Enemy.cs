@@ -154,8 +154,7 @@ public class Enemy : MonoBehaviour {
     }
 
 	public void OnTriggerStay2D(Collider2D col){
-		if(col.gameObject.tag == "SecondWaveactivator")
-			GameController.instance.currentMinionPassed ++;
+		
         if (col.gameObject.tag == "Turret" && lastTurret != col.gameObject)
             tileWalked = 0;
 
@@ -166,12 +165,8 @@ public class Enemy : MonoBehaviour {
             lastTurret = col.gameObject;
             MovementDetection();
         }
-
-
-
 	}
-
-	
+		
 
 	void MovementDetection(){
 		//se il nemico è nel range di una torretta aumenta un contatore di distanza percorsa che viene poi resettato all'uscita
