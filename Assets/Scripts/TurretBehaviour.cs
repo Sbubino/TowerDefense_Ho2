@@ -3,18 +3,14 @@ using System.Collections;
 
 
 public class TurretBehaviour : MonoBehaviour {
-	public LayerMask mask;
+
 	public float rotationSpeed= 5.0f;
 	public GameObject bulletPrefab;
-	public Transform spawnPoint;
-
-	public float forceToBullet;
-
 	public float fireRate=1;
 	public float range=1;
 
 	public int turretDamage=1;
-	public static int damageRefer;
+
 	public int turretCost;
 	public int upgradeCost;
 	public int sellEarn;
@@ -25,31 +21,53 @@ public class TurretBehaviour : MonoBehaviour {
 	public bool fastT, heavyT, slowT, explosionT;
 	public static bool isFast,isHeavy,isSl, isExp;
 	public bool upgrade1=false, upgrade2=false;
-	private float timer;
+	GameObject[] bulletPool;
+    int bulletPoolIndex;
+    GameObject target;
 
+    GameObject[] targetsInRange;
+    int indexOfTarget;
+    float[] distanceOfTargets;
+
+    GameObject sprite;
+
+	float timer;
 	GameObject mainTarget;
-
+	GameObject spawnPoint;
 
 
 	void Awake(){
+		target = null;
+		sprite = transform.GetChild(0).gameObject;
+		spawnPoint = transform.GetChild(1).gameObject;
+		targetsInRange = new GameObject[10];
+		indexOfTarget = 0;
+		distanceOfTargets = new float[10];
+		bulletPool = new GameObject[20];
+		for(int i = 0; i< bulletPool.Length; i++)
+		{
+			bulletPool[i] = Instantiate(bulletPrefab, Vector3.zero, bulletPrefab.transform.rotation) as GameObject;
+			bulletPool[i].SetActive(false);
+		}
+		bulletPoolIndex = 0;
 
-	}
-	// Use this for initialization
-	void Start () {
-		damageRefer = turretDamage;
 		isSl = slowT;
 		isExp = explosionT;
 		isFast=fastT;
 		isHeavy=heavyT;
+
+	}
+	// Use this for initialization
+	void Start () {
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		gameObject.GetComponent<CircleCollider2D> ().radius = range;
-		timer += Time.deltaTime;
-
-	
+		timer += Time.deltaTime;	
 	}
+
 
 /*	GameObject SetTarget(){
 		Collider2D[] possibleTarget = Physics2D.OverlapCircleAll (transform.position, range , mask);
@@ -81,6 +99,26 @@ public class TurretBehaviour : MonoBehaviour {
 
         
 			/*Vector2 vectorToTarget=mainTarget.transform.position-transform.position;
+=======
+
+
+
+	void OnTriggerStay2D(Collider2D trig){
+		if (trig.gameObject.tag == "Enemy" && fastT==true) {
+			indexOfTarget = CheckEnemy(trig.gameObject);
+			if(indexOfTarget == -1)
+			{
+				AddEnemy(trig.gameObject);
+			}
+			
+			if (target == null)
+				SetTarget(trig.gameObject);
+			else if (!target.activeInHierarchy)
+				SetTarget(trig.gameObject);
+
+
+			Vector2 vectorToTarget = target.transform.position - transform.position;
+>>>>>>> a51b91032281b253eeabe47b4c0274f2fcacf581
 			float angle= Mathf.Atan2 (vectorToTarget.y, vectorToTarget.x)*Mathf.Rad2Deg;
 			Quaternion q=Quaternion.AngleAxis (angle,Vector3.forward);
 			transform.rotation=Quaternion.Slerp (transform.rotation,q, Time.deltaTime*rotationSpeed);
@@ -88,79 +126,98 @@ public class TurretBehaviour : MonoBehaviour {
 			
 			if (timer>=fireRate) {
 
-				GameObject bulletInstance;
-				bulletInstance = Instantiate (bulletPrefab, spawnPoint.transform.position, bulletPrefab.transform.rotation)as GameObject;
-				bulletInstance.GetComponent<BulletScript>().SetDamage(turretDamage);
-				bulletInstance.GetComponent<BulletScript>().target = trig.gameObject;
-				Destroy (bulletInstance, 3);
+				ShootFast ();
 				timer=0;
 			}
 
 		}
 		if (trig.gameObject.tag == "Enemy" && heavyT==true) {
 			
+			indexOfTarget = CheckEnemy(trig.gameObject);
+			if(indexOfTarget == -1)
+			{
+				AddEnemy(trig.gameObject);
+			}
 			
-			Vector2 vectorToTarget=trig.transform.position-transform.position;
+			if (target == null)
+				SetTarget(trig.gameObject);
+			else if (!target.activeInHierarchy)
+				SetTarget(trig.gameObject);
+			
+			
+			Vector2 vectorToTarget = target.transform.position - transform.position;
 			float angle= Mathf.Atan2 (vectorToTarget.y, vectorToTarget.x)*Mathf.Rad2Deg;
 			Quaternion q=Quaternion.AngleAxis (angle,Vector3.forward);
 			transform.rotation=Quaternion.Slerp (transform.rotation,q, Time.deltaTime*rotationSpeed);
 			
 			
 			if (timer>=fireRate) {
-
-				GameObject bulletInstance;
-				bulletInstance = Instantiate (bulletPrefab, spawnPoint.transform.position, bulletPrefab.transform.rotation)as GameObject;
-				bulletInstance.GetComponent<Rigidbody2D>().AddForce(transform.right *forceToBullet);
-				bulletInstance.GetComponent<BulletScript>().SetDamage(turretDamage);
 				
-				Destroy (bulletInstance, 3);
+				ShootFast ();
 				timer=0;
 			}
 			
 		}
 		if (trig.gameObject.tag == "Enemy" && slowT==true) {
+
+			indexOfTarget = CheckEnemy(trig.gameObject);
+			if(indexOfTarget == -1)
+			{
+				AddEnemy(trig.gameObject);
+			}
+			
+			if (target == null)
+				SetTarget(trig.gameObject);
+			else if (!target.activeInHierarchy)
+				SetTarget(trig.gameObject);
 			
 			
-			Vector2 vectorToTarget=trig.transform.position-transform.position;
+			Vector2 vectorToTarget = target.transform.position - transform.position;
 			float angle= Mathf.Atan2 (vectorToTarget.y, vectorToTarget.x)*Mathf.Rad2Deg;
 			Quaternion q=Quaternion.AngleAxis (angle,Vector3.forward);
 			transform.rotation=Quaternion.Slerp (transform.rotation,q, Time.deltaTime*rotationSpeed);
 			
 			
 			if (timer>=fireRate) {
-
-				GameObject bulletInstance;
-				bulletInstance = Instantiate (bulletPrefab, spawnPoint.transform.position, bulletPrefab.transform.rotation)as GameObject;
-				bulletInstance.GetComponent<Rigidbody2D>().AddForce(transform.right *forceToBullet);
-				bulletInstance.GetComponent<BulletScript>().SetDamage(turretDamage);
-				bulletInstance.GetComponent<BulletScript>().SetSlow(slowAmmount);
-				Destroy (bulletInstance, 3);
+				
+				ShootSlow ();
 				timer=0;
 			}
 			
 		}
 		if (trig.gameObject.tag == "Enemy" && explosionT==true) {
 
-			Vector2 vectorToTarget=trig.transform.position-transform.position;
+			indexOfTarget = CheckEnemy(trig.gameObject);
+			if(indexOfTarget == -1)
+			{
+				AddEnemy(trig.gameObject);
+			}
+			
+			if (target == null)
+				SetTarget(trig.gameObject);
+			else if (!target.activeInHierarchy)
+				SetTarget(trig.gameObject);
+			
+			
+			Vector2 vectorToTarget = target.transform.position - transform.position;
 			float angle= Mathf.Atan2 (vectorToTarget.y, vectorToTarget.x)*Mathf.Rad2Deg;
 			Quaternion q=Quaternion.AngleAxis (angle,Vector3.forward);
 			transform.rotation=Quaternion.Slerp (transform.rotation,q, Time.deltaTime*rotationSpeed);
 			
 			
 			if (timer>=fireRate) {
-
-				GameObject bulletInstance;
-				bulletInstance = Instantiate (bulletPrefab, spawnPoint.transform.position, bulletPrefab.transform.rotation)as GameObject;
-				bulletInstance.GetComponent<Rigidbody2D>().AddForce(transform.right *forceToBullet);
-				bulletInstance.GetComponent<BulletScript>().SetDamage(turretDamage);
-				bulletInstance.GetComponent<BulletScript>().GetRange (explosionRange);
-				bulletInstance.GetComponent<BulletScript>().GetExpDur(expDuration);
-				Destroy (bulletInstance, 3);
+				
+				ShootExplosive ();
 				timer=0;
 			}
 			
 		}*/
 		
+	}
+	void OnTriggerExit2D(Collider2D trig)
+	{
+		if (trig.gameObject.tag == "Enemy" && trig.gameObject.Equals(target))
+			target = null;
 	}
 
 	void IsFast(){
@@ -174,5 +231,114 @@ public class TurretBehaviour : MonoBehaviour {
 	}
 	void IsExplosion(){
 		
+	}
+
+
+	void SetTarget(GameObject enemy)
+	{
+		int tileValue = 0;
+		int index = -1;
+		if (target == null || !target.activeInHierarchy)
+		{
+			for(int i = 0; i < targetsInRange.Length; i++)
+			{
+				if(targetsInRange[i].GetComponent<Enemy>().ReturnTileValue() > tileValue)
+				{
+					index = i;
+					tileValue = targetsInRange[i].GetComponent<Enemy>().ReturnTileValue();
+				}
+			}
+		}
+		
+		if (index == -1)
+			target = enemy;
+		else
+			target = targetsInRange[index].gameObject;
+	}
+
+	void ShootFast()
+	{
+		if (bulletPoolIndex < bulletPool.Length - 1)
+		{
+			if (!bulletPool[bulletPoolIndex].activeInHierarchy)
+			{
+				bulletPool[bulletPoolIndex].transform.position = spawnPoint.transform.position;
+				bulletPool[bulletPoolIndex].SetActive(true);
+				bulletPool[bulletPoolIndex].SendMessage("SetTarget", target);
+				bulletPool[bulletPoolIndex].GetComponent<BulletScript>().SetDamage(turretDamage);
+				
+			}
+			else
+				bulletPoolIndex++;
+		}
+		else
+			bulletPoolIndex = 0;
+		
+	}
+	void ShootExplosive()
+	{
+		if (bulletPoolIndex < bulletPool.Length - 1)
+		{
+			if (!bulletPool[bulletPoolIndex].activeInHierarchy)
+			{
+				bulletPool[bulletPoolIndex].transform.position = spawnPoint.transform.position;
+				bulletPool[bulletPoolIndex].SetActive(true);
+				bulletPool[bulletPoolIndex].SendMessage("SetTarget", target);
+				bulletPool[bulletPoolIndex].GetComponent<BulletScript>().SetDamage(turretDamage);
+				bulletPool[bulletPoolIndex].GetComponent<BulletScript>().GetRange (explosionRange);
+				bulletPool[bulletPoolIndex].GetComponent<BulletScript>().GetExpDur(expDuration);
+				
+			}
+			else
+				bulletPoolIndex++;
+		}
+		else
+			bulletPoolIndex = 0;
+		
+	}
+	void ShootSlow()
+	{
+		if (bulletPoolIndex < bulletPool.Length - 1)
+		{
+			if (!bulletPool[bulletPoolIndex].activeInHierarchy)
+			{
+				bulletPool[bulletPoolIndex].transform.position = spawnPoint.transform.position;
+				bulletPool[bulletPoolIndex].SetActive(true);
+				bulletPool[bulletPoolIndex].SendMessage("SetTarget", target);
+				bulletPool[bulletPoolIndex].GetComponent<BulletScript>().SetDamage(turretDamage);
+				bulletPool[bulletPoolIndex].GetComponent<BulletScript>().SetSlow(slowAmmount);
+
+				
+			}
+			else
+				bulletPoolIndex++;
+		}
+		else
+			bulletPoolIndex = 0;
+		
+	}
+
+
+	void AddEnemy(GameObject enemy)
+	{
+		for (int i = 0; i < targetsInRange.Length; i++)
+		{
+			if(targetsInRange[i] == null)
+			{
+				targetsInRange[i] = enemy;
+			}
+		}    
+		
+	}
+
+	int CheckEnemy(GameObject enemy)
+	{
+		for(int i = 0; i < targetsInRange.Length; i++)
+		{
+			if (targetsInRange[i] != null && targetsInRange[i].Equals(enemy))
+				return i;
+		}
+		
+		return -1;
 	}
 }

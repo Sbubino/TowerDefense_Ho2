@@ -122,4 +122,17 @@ public class Enemy : MonoBehaviour {
    //     GameController.instance.TakeEnergy(AddEnergy);
     }
 
+
+		
+
+
+
+
+
+	public int ReturnTileValue(){
+		return Mathf.RoundToInt (tileWalked);
+	}
+	public int ReturnSwitchValue(){
+		return switchPriority;
+	}
 }

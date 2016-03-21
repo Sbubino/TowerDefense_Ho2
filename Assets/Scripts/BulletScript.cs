@@ -2,72 +2,91 @@
 using System.Collections;
 
 public class BulletScript : MonoBehaviour {
-	public GameObject explosionRange;
+
 	public float expDur;
-	[HideInInspector]
-	public int dam;
+
 	[HideInInspector]
 	public float raggio;
 	public float slowAmount;
-	public GameObject target;
+
+	public int dam;
 	public float speed;
-
-
+	GameObject target;
+	bool explosion;
+	float timer=0;
 
 	// Use this for initialization
 	void Start () {
-		explosionRange.SetActive (false);
+		gameObject.GetComponent<CircleCollider2D> ().radius = 0.1f;
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		SetRange ();
+		Debug.Log ("timer: "+timer);
 		transform.position = Vector2.Lerp(transform.position , target.transform.position , speed * Time.deltaTime);
-
-	}
-
-	void OnCollisionEnter2D(Collision2D col){
-		if(col.gameObject.tag=="Enemy" && TurretBehaviour.isExp==true){
-
-			explosionRange.SetActive(true);
-			gameObject.GetComponent<Rigidbody2D>().velocity=Vector2.zero;
-			float timer=0;
+		if(explosion==true){
 			timer+=Time.deltaTime;
-			if(timer>=expDur){
+		}
+		if(TurretBehaviour.isExp == true){
+			ExplosionVanish ();
+		}
 
-				explosionRange.SetActive (false);
-				timer=0;
-			}
-		}
-		if (col.gameObject.tag == "Enemy" && TurretBehaviour.isFast == true) {
-			col.gameObject.GetComponent<Enemy>().TakeDamage(dam);
-			Destroy (this.gameObject);
-		}
-		if (col.gameObject.tag == "Enemy" && TurretBehaviour.isHeavy == true) {
-			col.gameObject.GetComponent<Enemy>().TakeDamage(dam);
-			Destroy (this.gameObject);
-		}
-		if (col.gameObject.tag == "Enemy" && TurretBehaviour.isSl == true) {
-			col.gameObject.GetComponent<Enemy>().TakeDamage(dam);
-			col.gameObject.GetComponent<Enemy>().GetSlow(slowAmount);
-			Destroy (this.gameObject);
-		}
 	}
 
 	void OnTriggerEnter2D(Collider2D trig){
-		if (trig.gameObject.tag == "Enemy") {
-			trig.gameObject.GetComponent<Enemy>().TakeDamage(dam);
+		if (trig.gameObject.tag == "Enemy" && TurretBehaviour.isFast == true) {
+			if (trig.gameObject.CompareTag("Enemy"))
+			{
+				Debug.Log("hit");
+				trig.gameObject.SendMessage("TakeDamage", dam);
+				gameObject.SetActive(false);
+			}
+		}
+		if (trig.gameObject.tag == "Enemy" && TurretBehaviour.isHeavy == true) {
+			if (trig.gameObject.CompareTag("Enemy"))
+			{
+				Debug.Log("hit");
+				trig.gameObject.SendMessage("TakeDamage", dam);
+				gameObject.SetActive(false);
+			}
+		}
+		if (trig.gameObject.tag == "Enemy" && TurretBehaviour.isSl == true) {
+			if (trig.gameObject.CompareTag("Enemy"))
+			{
+				Debug.Log("hit");
+				trig.gameObject.SendMessage("TakeDamage", dam);
+				trig.gameObject.SendMessage("GetSlow",slowAmount);
+				gameObject.SetActive(false);
+			}
+		}
+		if (trig.gameObject.tag == "Enemy" && TurretBehaviour.isExp == true) {
+			if (trig.gameObject.CompareTag("Enemy"))
+			{
+				Debug.Log("hit");
+				gameObject.GetComponent<Rigidbody2D>().velocity=Vector2.zero;
+				SetRange ();
+				trig.gameObject.SendMessage("TakeDamage", dam);
+			//	float timer=0;
+
+				explosion=true;
+
+				/*if(timer>=expDur){			
+					explosion=false;
+					timer=0;
+					gameObject.SetActive(false);
+				}*/
+
+			}
 		}
 	}
+
 
     public void SetTarget(GameObject tar)
     {
         target = tar;
     }
 
-	void SetRange(){
-		explosionRange.GetComponent<CircleCollider2D> ().radius = raggio;
-	}
+
 	public void GetExpDur(float t){
 		expDur = t;
 	}
@@ -80,4 +99,15 @@ public class BulletScript : MonoBehaviour {
 	public void SetSlow(float slowVal){
 		slowAmount=slowVal;
 	}
+	void SetRange(){
+		gameObject.GetComponent<CircleCollider2D> ().radius = raggio;
+	}
+	void ExplosionVanish(){
+		if(timer>=expDur){			
+			explosion=false;
+			timer=0;
+			gameObject.SetActive(false);
+		}
+	}
+
 }

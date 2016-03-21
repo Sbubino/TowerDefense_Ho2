@@ -7,27 +7,27 @@ public class Wave : MonoBehaviour {
 	public int minionSpawnIn;
 	[HideInInspector]
 	public int activator = 0;
-	[HideInInspector]
-	public int activatorSecondPoint = 0;
 
-
+	GameObject spawnPoint;
 	int index = 0;
 	float spawnTimer;
+
 
 	void Awake(){
 		spawnTimer = 10;
 		//inserisco i minion nell'oggetto ondata
 		GetChildInArray ();
-
+	}
+		
+	void Update(){
+		if (activator != 0) {
+			MinionSpawn (spawnPoint);
+		}
 	}
 
-	void Update(){
-		//tramite il game controller attivo l'ondata
-		if(activator != 0)
-		   MinionSpawn ();
-
-		if(activatorSecondPoint != 0)
-			MinionSpawn2nd ();
+	public void StartWave(GameObject spawn){
+		activator++;
+		spawnPoint = spawn;
 	}
 
 	void GetChildInArray (){
@@ -37,26 +37,14 @@ public class Wave : MonoBehaviour {
 		}
 	}
 
-	void MinionSpawn(){
+	void MinionSpawn(GameObject spawn){
 		//spawno i minion in ogni certo periodo di tempo
 		spawnTimer += Time.deltaTime;
 
 		if (spawnTimer >= minionSpawnIn && index <= childArray.Length -1) {
-			childArray [index].transform.position = GameController.instance.spawnPoint.position;
+			childArray [index].transform.position = spawn.transform.position;
 			childArray [index].SetActive (true);
 
-			index++;
-			spawnTimer = 0;
-		}
-	}
-	void MinionSpawn2nd(){
-		//spawno i minion in ogni certo periodo di tempo nel secondo spawn point
-		spawnTimer += Time.deltaTime;
-		
-		if (spawnTimer >= minionSpawnIn && index <= childArray.Length -1) {
-			childArray [index].transform.position = GameController.instance.spawnPoint2.position;
-			childArray [index].SetActive (true);
-			
 			index++;
 			spawnTimer = 0;
 		}
