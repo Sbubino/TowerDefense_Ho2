@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class turret : MonoBehaviour {
-    public GameObject m_BulletPrefab;
+   /* public GameObject m_BulletPrefab;
     public float rotationSpeed;
     public float fireRate;
 
@@ -151,6 +151,6 @@ public class turret : MonoBehaviour {
 
 
             
-
+    */
 
 }

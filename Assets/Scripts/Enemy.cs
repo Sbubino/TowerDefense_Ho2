@@ -4,7 +4,7 @@ using System.Collections;
 public class Enemy : MonoBehaviour {
     public LayerMask m_TileMask;
     public LayerMask m_SwitchMask;
-	public int m_MaxLife;
+    public int m_MaxLife;
     public int banishmentCost;
     public float Speed;
     public float distance = 1.8f;
@@ -12,118 +12,87 @@ public class Enemy : MonoBehaviour {
 
 
     bool inTurretRange;
-	float tileWalked = 0f;
-	int switchPriority = 0;
+    float tileWalked = 0f;
+    int switchPriority = 0;
     int currentLife;
-    Vector3[] possibleTilePosition;
-    Vector3 nextTile;
-    Vector3 currentTile;
-    Vector3 lastTile;
+    RaycastHit2D[] possibleTile;
+    Vector2 nextTile;
+    GameObject currentTile;
     Vector3 spawn;
-	Vector3 lastPosition;
     GameObject lastTurret;
-
+    float timer;
 
 
     void Awake()
     {
-        possibleTilePosition = new Vector3[2];
-        nextTile = transform.position;
+        nextTile = Vector2.zero;
 
-		lastPosition = transform.position;        
+
+
     }
+
+    void Update()
+    {
+        timer += Time.deltaTime;
+        if (timer > 2)
+            SetCurrentTiles();
+        Move();
+          Debug.Log(currentTile.GetComponent <Tile>().GetDistanceToCore());
+        //Debug.Log(nextTile);
+    }
+
 
 
     void OnEnable()
     {
-       StartCoroutine("TakeTilePosition");
-		currentLife = m_MaxLife;
+
+        currentLife = m_MaxLife;
         spawn = transform.position;
 
     }
 
-
-
-
-    void  SetNextTile()
+    //Setta i parametri possible time, next tile e current tile
+    void SetCurrentTiles()
     {
-
-        for (int i = 0; i<possibleTilePosition.Length; i++)
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector3.forward, 5, m_TileMask);
+        if (hit.collider != null)
         {
-
-            if (possibleTilePosition[i] != Vector3.zero && possibleTilePosition[i] != lastTile)
+            if (!hit.collider.CompareTag("Switch"))
             {
-                nextTile = possibleTilePosition[i];
-                break;
+                currentTile = hit.collider.gameObject;
+                nextTile = currentTile.GetComponent<Tile>().GetNextTile().transform.position;
             }
-                
+            else
+            {
+                currentTile = hit.collider.gameObject;
+                nextTile = currentTile.GetComponent<Tile>().GetPositionNextTileSwitch().transform.position;
+            }
         }
 
-       
     }
 
-    IEnumerator TakeTilePosition()
-    {
+
         
-        while (Vector3.Distance(transform.position, nextTile) < 0.5)
-        {
-            RaycastHit2D hit1 = Physics2D.Raycast(transform.position, new Vector2(), 0f, m_SwitchMask, 0f, 2f);
-
-            if (hit1.collider != null)
-            {
-				switchPriority++;
-
-                currentTile = hit1.transform.position;
-
-                nextTile = hit1.collider.GetComponent<Switch>().GetNextTilePosition();
-
-            }
 
 
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(), 0f, m_TileMask, 0f, 2f);
+    
 
+    
 
-            if (hit.collider != null && hit1.collider == null)
-            {
-               
-
-				Move();
-
-                Tile temp = hit.transform.gameObject.GetComponent<Tile>();
-
-                possibleTilePosition = temp.GetPositionNextTile();
-
-                lastTile = currentTile;
-
-                currentTile = nextTile;
-             
-                SetNextTile();
-  
-                
-
-                yield return null;
-            }
-
-
-            while (Vector3.Distance(transform.position, nextTile) >= 0.2f)
-            {
-                Move();
-               
-                yield return null;
-            }
-
-        }
+    void SetNextTile(GameObject tile)
+    {
+        nextTile = tile.transform.position;
+        Move();
 
     }
-
 
 
     void Move()
     {
 
         // transform.Translate(Vector3.zero);
-
-        transform.position =  Vector2.Lerp(transform.position, nextTile, (Speed * Time.deltaTime) / Vector2.Distance(transform.position, nextTile)) ;  
+        if (nextTile != Vector2.zero)
+        transform.position =  Vector2.Lerp(transform.position, nextTile,(Speed * Time.deltaTime) / Vector2.Distance(nextTile, transform.position)) ;  
         //transform.Translate(nextTile * Time.deltaTime * Speed);
     }
 
@@ -153,39 +122,4 @@ public class Enemy : MonoBehaviour {
    //     GameController.instance.TakeEnergy(AddEnergy);
     }
 
-	public void OnTriggerStay2D(Collider2D col){
-		if(col.gameObject.tag == "SecondWaveactivator")
-			GameController.instance.currentMinionPassed ++;
-        if (col.gameObject.tag == "Turret" && lastTurret != col.gameObject)
-            tileWalked = 0;
-
-
-        if (col.gameObject.tag == "Turret")
-        {
-            
-            lastTurret = col.gameObject;
-            MovementDetection();
-        }
-
-
-
-	}
-
-	
-
-	void MovementDetection(){
-		//se il nemico è nel range di una torretta aumenta un contatore di distanza percorsa che viene poi resettato all'uscita
-			tileWalked += Vector2.Distance (transform.position, lastPosition);
-			lastPosition = transform.position;
-	
-	}
-
-
-
-	public int ReturnTileValue(){
-		return Mathf.RoundToInt (tileWalked);
-	}
-	public int ReturnSwitchValue(){
-		return switchPriority;
-	}
 }

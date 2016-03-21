@@ -51,7 +51,7 @@ public class TurretBehaviour : MonoBehaviour {
 	
 	}
 
-	GameObject SetTarget(){
+/*	GameObject SetTarget(){
 		Collider2D[] possibleTarget = Physics2D.OverlapCircleAll (transform.position, range , mask);
 		//GameObject temptarget = possibleTarget [0].gameObject;
 		//return temptarget;
@@ -72,18 +72,18 @@ public class TurretBehaviour : MonoBehaviour {
 		return null;
 
 	}
-
+    */
 
 	void OnTriggerStay2D(Collider2D trig){
-		if (trig.gameObject.tag == "Enemy" && fastT==true) {
+	/*+	if (trig.gameObject.tag == "Enemy" && fastT==true) {
 			mainTarget = SetTarget ();
 			Debug.Log (mainTarget.name);
 
-
+        
 			/*Vector2 vectorToTarget=mainTarget.transform.position-transform.position;
 			float angle= Mathf.Atan2 (vectorToTarget.y, vectorToTarget.x)*Mathf.Rad2Deg;
 			Quaternion q=Quaternion.AngleAxis (angle,Vector3.forward);
-			transform.rotation=Quaternion.Slerp (transform.rotation,q, Time.deltaTime*rotationSpeed);*/
+			transform.rotation=Quaternion.Slerp (transform.rotation,q, Time.deltaTime*rotationSpeed);
 
 			
 			if (timer>=fireRate) {
@@ -159,7 +159,7 @@ public class TurretBehaviour : MonoBehaviour {
 				timer=0;
 			}
 			
-		}
+		}*/
 		
 	}
 
