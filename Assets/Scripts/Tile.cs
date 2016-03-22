@@ -292,7 +292,7 @@ public class Tile : MonoBehaviour {
 				float angle = Mathf.Atan2 (vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
 				sprite.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
 
-			} else {
+			} else if(path2 != null) {
 
 				Vector2 vectorToTarget = path2.transform.position - sprite.transform.position;
 				float angle = Mathf.Atan2 (vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
