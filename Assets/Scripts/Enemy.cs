@@ -37,7 +37,7 @@ public class Enemy : MonoBehaviour {
         if (timer > 2)
             SetCurrentTiles();
         Move();
-          Debug.Log(currentTile.GetComponent <Tile>().GetDistanceToCore());
+         // Debug.Log(currentTile.GetComponent <Tile>().GetDistanceToCore());
         //Debug.Log(nextTile);
     }
 

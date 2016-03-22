@@ -114,10 +114,11 @@ public class GameController : MonoBehaviour {
 	void WaveControl(){
 		//gestione dei due metodi precedenti
 		SetNextWave();
-
-		if (nextWaveControl < indexWave) {
-			StartNextWave ();
-			nextWaveControl = indexWave;	
+		if (indexWave <= wave.Length) {
+			if (nextWaveControl < indexWave) {
+				StartNextWave ();
+				nextWaveControl = indexWave;	
+			}
 		}
 
 		//stabilisco la fine della partita 
@@ -130,7 +131,12 @@ public class GameController : MonoBehaviour {
 		if (localWaveIndex < wave.Length) {
 			for (int i = 0; i < spawnPoint.Length; i++) {
 				if (spawnPoint [i].activeSelf) {
-					wave [localWaveIndex].GetComponent<Wave>().StartWave(spawnPoint [i]);
+					if (wave [localWaveIndex].GetComponent<Wave> ().activator != 0) {
+						break;
+					}
+				
+				    wave [localWaveIndex].GetComponent<Wave> ().StartWave (spawnPoint [i]);
+					if (localWaveIndex < wave.Length - 1)
 					localWaveIndex++;
 				}
 			}
