@@ -34,10 +34,10 @@ public class Enemy : MonoBehaviour {
     void Update()
     {
         timer += Time.deltaTime;
-        if (timer > 2)
-            SetCurrentTiles();
+        
+        SetCurrentTiles();
         Move();
-          Debug.Log(currentTile.GetComponent <Tile>().GetDistanceToCore());
+       //   Debug.Log(currentTile.GetComponent <Tile>().GetDistanceToCore());
         //Debug.Log(nextTile);
     }
 
@@ -94,6 +94,11 @@ public class Enemy : MonoBehaviour {
         if (nextTile != Vector2.zero)
         transform.position =  Vector2.Lerp(transform.position, nextTile,(Speed * Time.deltaTime) / Vector2.Distance(nextTile, transform.position)) ;  
         //transform.Translate(nextTile * Time.deltaTime * Speed);
+    }
+
+    public int DistToCore()
+    {
+        return currentTile.GetComponent<Tile>().GetDistanceToCore();
     }
 
     public void TakeDamage(int amount)

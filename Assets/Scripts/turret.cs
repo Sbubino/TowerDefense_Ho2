@@ -2,18 +2,19 @@
 using System.Collections;
 
 public class turret : MonoBehaviour {
-   /* public GameObject m_BulletPrefab;
+    public GameObject m_BulletPrefab;
     public float rotationSpeed;
     public float fireRate;
+    
+    public LayerMask m_EnemtLayer;
 
     GameObject[] bulletPool;
     int bulletPoolIndex;
     GameObject target;
-
-    GameObject[] targetsInRange;
+    float range;
+    Collider2D[] enemyInRange;
     int indexOfTarget;
-    float[] distanceOfTargets;
-
+   
     GameObject sprite;
     GameObject spawnPoint;
 
@@ -21,12 +22,13 @@ public class turret : MonoBehaviour {
 
     void Awake()
     {
+       enemyInRange = new Collider2D[10];
+        range = GetComponent<CircleCollider2D>().radius;
+       
         target = null;
         sprite = transform.GetChild(0).gameObject;
-        spawnPoint = transform.GetChild(1).gameObject;
-        targetsInRange = new GameObject[10];
+        spawnPoint = transform.GetChild(0).GetChild(0).gameObject;
         indexOfTarget = 0;
-        distanceOfTargets = new float[10];
         bulletPool = new GameObject[20];
         for(int i = 0; i< bulletPool.Length; i++)
         {
@@ -39,7 +41,10 @@ public class turret : MonoBehaviour {
     void Update()
     {
         timer += Time.deltaTime;
+       
     }
+
+  
 
     void OnTriggerStay2D(Collider2D trig)
     {
@@ -47,23 +52,15 @@ public class turret : MonoBehaviour {
 
         if (trig.gameObject.tag == "Enemy")
         {
-            indexOfTarget = CheckEnemy(trig.gameObject);
-            if(indexOfTarget == -1)
-            {
-                AddEnemy(trig.gameObject);
-            }
-
-            if (target == null)
-                SetTarget(trig.gameObject);
-            else if (!target.activeInHierarchy)
-                SetTarget(trig.gameObject);
+            Debug.Log("qui");
+            SetTarget();           
 
 
-            Vector2 vectorToTarget = target.transform.position - transform.position;
+            Vector2 vectorToTarget = target.transform.position - sprite.transform.position;
 			float angle= Mathf.Atan2 (vectorToTarget.y, vectorToTarget.x)*Mathf.Rad2Deg;
 			Quaternion q=Quaternion.AngleAxis (angle,Vector3.forward);
-			transform.rotation=Quaternion.Slerp (transform.rotation,q, Time.deltaTime*rotationSpeed);
-
+			sprite.transform.rotation = Quaternion.Slerp (sprite.transform.rotation,q, Time.deltaTime*rotationSpeed);
+            
 
             if (timer >= fireRate)
             {
@@ -82,53 +79,34 @@ public class turret : MonoBehaviour {
     }
 
 
-    void SetTarget(GameObject enemy)
+
+
+    void SetTarget()
     {
-        int tileValue = 0;
-        int index = -1;
-        if (target == null || !target.activeInHierarchy)
+         Physics2D.OverlapCircleNonAlloc(transform.position, range, enemyInRange,m_EnemtLayer);
+
+        for(int i = 0; i < enemyInRange.Length; i++)
         {
-            for(int i = 0; i < targetsInRange.Length; i++)
+            if (enemyInRange[i] != null)
             {
-                if(targetsInRange[i].GetComponent<Enemy>().ReturnTileValue() > tileValue)
+                if (target == null)
                 {
-                    index = i;
-                    tileValue = targetsInRange[i].GetComponent<Enemy>().ReturnTileValue();
+                    target = enemyInRange[i].gameObject;
+                }
+                else if (enemyInRange[i].gameObject.GetComponent<Enemy>().DistToCore() < target.GetComponent<Enemy>().DistToCore())
+                {
+                    target = enemyInRange[i].gameObject;
                 }
             }
         }
-
-        if (index == -1)
-            target = enemy;
-        else
-            target = targetsInRange[index].gameObject;
     }
 
 
-    void AddEnemy(GameObject enemy)
-    {
-        for (int i = 0; i < targetsInRange.Length; i++)
-            {
-              if(targetsInRange[i] == null)
-                {
-                   targetsInRange[i] = enemy;
-                }
-            }    
-        
-    }
+    
 
 
 
-    int CheckEnemy(GameObject enemy)
-    {
-        for(int i = 0; i < targetsInRange.Length; i++)
-        {
-            if (targetsInRange[i] != null && targetsInRange[i].Equals(enemy))
-                return i;
-        }
-
-        return -1;
-    }
+   
 
     void Shoot()
     {
@@ -151,6 +129,6 @@ public class turret : MonoBehaviour {
 
 
             
-    */
+    
 
 }
