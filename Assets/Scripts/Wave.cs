@@ -4,7 +4,7 @@ using System.Collections;
 public class Wave : MonoBehaviour {
 
 	GameObject[] childArray;
-	public int minionSpawnIn;
+	public float minionSpawnIn;
 	[HideInInspector]
 	public int activator = 0;
 

@@ -8,6 +8,7 @@ public class Tile : MonoBehaviour {
     public bool m_Core;
     public bool m_Switch;
     public bool m_Path1;
+	public int switchEnergyCost;
 
     GameObject[] positionNextTile;
     RaycastHit2D[] nearTile;
@@ -66,6 +67,7 @@ public class Tile : MonoBehaviour {
 
     void OnMouseDown() {
         Switch();
+		GameController.instance.LoseEnergy(switchEnergyCost);
     }
 
 
@@ -292,7 +294,7 @@ public class Tile : MonoBehaviour {
 				float angle = Mathf.Atan2 (vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
 				sprite.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
 
-			} else if(path2 != null) {
+			} else {
 
 				Vector2 vectorToTarget = path2.transform.position - sprite.transform.position;
 				float angle = Mathf.Atan2 (vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;

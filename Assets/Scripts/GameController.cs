@@ -38,7 +38,7 @@ public class GameController : MonoBehaviour {
 		//imposto i valori dell'energy iniziale
 		moltiplicatoreEnergy = 1f;
 		//currentEnergy = maxEnergy;
-		currentEnergy = 50;
+		currentEnergy = 150;
 
 		WaveBuild ();	
 		SpawnpointBuild ();
@@ -48,6 +48,12 @@ public class GameController : MonoBehaviour {
 	void Update () {
 		WaveControl ();
 		EnergyControl ();
+		Debug.Log (currentEnergy);
+		if (Input.GetKeyDown(KeyCode.S))
+			Time.timeScale = 2;
+
+		if (Input.GetKey(KeyCode.R))
+			Time.timeScale = 1;
 	}
 
 
@@ -63,7 +69,7 @@ public class GameController : MonoBehaviour {
 		//aumenta con il tempo
 		energyTimer += Time.deltaTime;
 
-		if (energyTimer >= EnergyUpTime) {
+		if (energyTimer >= EnergyUpTime && currentEnergy > 0) {
 			currentEnergy += EnergyUpValue;
 			energyTimer = 0;
 		}
@@ -75,6 +81,10 @@ public class GameController : MonoBehaviour {
 
 		if (currentEnergy > maxEnergy)
 			currentEnergy = maxEnergy;
+
+		if (currentEnergy < 0) {
+			Debug.Log ("Hai perso,sei una sega!");
+		}
 	}	  
 
 	void NextEnergyTime(){
@@ -114,23 +124,30 @@ public class GameController : MonoBehaviour {
 	void WaveControl(){
 		//gestione dei due metodi precedenti
 		SetNextWave();
-
-		if (nextWaveControl < indexWave) {
-			StartNextWave ();
-			nextWaveControl = indexWave;	
+		if (indexWave <= wave.Length) {
+			if (nextWaveControl < indexWave) {
+				StartNextWave ();
+				nextWaveControl = indexWave;	
+			}
 		}
 
 		//stabilisco la fine della partita 
-		//if (indexWave >= maxWaveNumber)
-		//carica la fine
-
+		if (indexWave >= maxWaveNumber) {
+			if(GameObject.FindWithTag ("Enemy") == null)
+				Debug.Log ("LivelloFinito");
+		}
 	}
 
 	void StartNextWave(){	
 		if (localWaveIndex < wave.Length) {
 			for (int i = 0; i < spawnPoint.Length; i++) {
 				if (spawnPoint [i].activeSelf) {
-					wave [localWaveIndex].GetComponent<Wave>().StartWave(spawnPoint [i]);
+
+					if (wave [localWaveIndex].GetComponent<Wave> ().activator != 0) 
+						break;					
+				
+				    wave [localWaveIndex].GetComponent<Wave> ().StartWave (spawnPoint [i]);
+					if (localWaveIndex < wave.Length - 1)
 					localWaveIndex++;
 				}
 			}

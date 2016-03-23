@@ -57,17 +57,24 @@ public class Enemy : MonoBehaviour {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector3.forward, 5, m_TileMask);
         if (hit.collider != null)
         {
-            if (!hit.collider.CompareTag("Switch"))
+			if(hit.collider.CompareTag("Core")){
+				GameController.instance.LoseEnergy(banishmentCost);
+				transform.position = spawn;
+				Debug.Log ("Fanculo");
+			}
+
+			else if (!hit.collider.CompareTag("Switch"))
             {
                 currentTile = hit.collider.gameObject;
                 nextTile = currentTile.GetComponent<Tile>().GetNextTile().transform.position;
             }
-            else
+			else
             {
                 currentTile = hit.collider.gameObject;
                 nextTile = currentTile.GetComponent<Tile>().GetPositionNextTileSwitch().transform.position;
             }
         }
+	
 
     }
 
@@ -106,6 +113,7 @@ public class Enemy : MonoBehaviour {
         currentLife -= amount;
 		if(currentLife <= 0){ 
 			this.gameObject.SetActive(false);
+			GameController.instance.TakeEnergy(AddEnergy);
 		}
     }
 
@@ -117,9 +125,17 @@ public class Enemy : MonoBehaviour {
         
     }
 
-    public void GetSlow(float slow)
+    void Slow(float[] slow){
+		Debug.Log ("kesooo");
+		StartCoroutine ("GetSlow", slow);
+
+	}
+
+	IEnumerator GetSlow(float[] slow)
     {
-        Speed /= slow;
+		Speed /= slow [0];
+		yield return new WaitForSeconds (slow [1]);
+		Speed *= slow [0];
     }
 
     void OnDisable()

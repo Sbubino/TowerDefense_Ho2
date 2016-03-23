@@ -22,8 +22,8 @@ public class turret : MonoBehaviour {
 
     void Awake()
     {
-       enemyInRange = new Collider2D[10];
-        range = GetComponent<CircleCollider2D>().radius;
+      	enemyInRange = new Collider2D[20];
+        range = GetComponent<CircleCollider2D>().radius - 0.5f;
        
         target = null;
         sprite = transform.GetChild(0).gameObject;
@@ -41,10 +41,12 @@ public class turret : MonoBehaviour {
     void Update()
     {
         timer += Time.deltaTime;
+
+	//	Debug.DrawRay (transform.position,target.transform.position - transform.position );
+
        
     }
 
-  
 
     void OnTriggerStay2D(Collider2D trig)
     {
@@ -52,11 +54,10 @@ public class turret : MonoBehaviour {
 
         if (trig.gameObject.tag == "Enemy")
         {
-            Debug.Log("qui");
-            SetTarget();           
+			SetTarget();
 
 
-            Vector2 vectorToTarget = target.transform.position - sprite.transform.position;
+			Vector2 vectorToTarget = target.transform.position - sprite.transform.position;
 			float angle= Mathf.Atan2 (vectorToTarget.y, vectorToTarget.x)*Mathf.Rad2Deg;
 			Quaternion q=Quaternion.AngleAxis (angle,Vector3.forward);
 			sprite.transform.rotation = Quaternion.Slerp (sprite.transform.rotation,q, Time.deltaTime*rotationSpeed);
@@ -65,7 +66,7 @@ public class turret : MonoBehaviour {
             if (timer >= fireRate)
             {
                 Shoot();
-                timer = 0;
+               
             }
 
         }
@@ -74,8 +75,12 @@ public class turret : MonoBehaviour {
 
     void OnTriggerExit2D(Collider2D trig)
     {
-        if (trig.gameObject.tag == "Enemy" && trig.gameObject.Equals(target))
-            target = null;
+		if (trig.CompareTag ("Enemy")) {
+			target = null;
+			CancelEnemyArray(trig);
+			SetTarget ();
+		}
+
     }
 
 
@@ -83,13 +88,13 @@ public class turret : MonoBehaviour {
 
     void SetTarget()
     {
-         Physics2D.OverlapCircleNonAlloc(transform.position, range, enemyInRange,m_EnemtLayer);
+        Physics2D.OverlapCircleNonAlloc(transform.position, range, enemyInRange,m_EnemtLayer);
 
         for(int i = 0; i < enemyInRange.Length; i++)
         {
             if (enemyInRange[i] != null)
             {
-                if (target == null)
+                if (target == null || !target.activeInHierarchy)
                 {
                     target = enemyInRange[i].gameObject;
                 }
@@ -99,9 +104,19 @@ public class turret : MonoBehaviour {
                 }
             }
         }
+
+
     }
 
+	void CancelEnemyArray(Collider2D target){
+		for (int i = 0; i < enemyInRange.Length; i++) {
+			if(enemyInRange[i] != null){	
+				if( enemyInRange[i].Equals(target))
+					enemyInRange[i] = null;
+			}
 
+		}
+	}
     
 
 
@@ -110,21 +125,24 @@ public class turret : MonoBehaviour {
 
     void Shoot()
     {
-        if (bulletPoolIndex < bulletPool.Length - 1)
-        {
-            if (!bulletPool[bulletPoolIndex].activeInHierarchy)
-            {
-                bulletPool[bulletPoolIndex].transform.position = spawnPoint.transform.position;
-                bulletPool[bulletPoolIndex].SetActive(true);
-                bulletPool[bulletPoolIndex].SendMessage("SetTarget", target);
+       if (target.activeInHierarchy) {
 
-            }
-            else
-                bulletPoolIndex++;
-        }
-        else
-            bulletPoolIndex = 0;
+			if (bulletPoolIndex < bulletPool.Length - 1) {
+				if (!bulletPool [bulletPoolIndex].activeInHierarchy) {
+					bulletPool [bulletPoolIndex].transform.position = spawnPoint.transform.position;
+					bulletPool [bulletPoolIndex].SetActive (true);
+					bulletPool [bulletPoolIndex].SendMessage ("SetTarget", target);
+					timer = 0;
 
+				} else
+					bulletPoolIndex++;
+			} else
+				bulletPoolIndex = 0;
+		} else {
+			CancelEnemyArray(target.GetComponent<Collider2D>());
+			SetTarget ();
+
+		}
     }
 
 
