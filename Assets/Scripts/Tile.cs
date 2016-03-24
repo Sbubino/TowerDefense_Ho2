@@ -24,11 +24,14 @@ public class Tile : MonoBehaviour {
 
     GameObject sprite;
     float timer;
+	BoxCollider2D col;
 
 
     void Awake()
     {
-        if (m_Core)
+        
+
+		if (m_Core)
         {
             distanceToCore = 0;
             nextTile = gameObject;
@@ -36,8 +39,10 @@ public class Tile : MonoBehaviour {
         walkableTileMask = 1 << 8;
 
         SetNextTilePosition();
-        if (m_Switch)
-            sprite = transform.GetChild(0).gameObject;
+        if (m_Switch) {
+			sprite = transform.GetChild (0).gameObject;
+			col = gameObject.GetComponent<BoxCollider2D>();
+		}
 
         checkDistance = false;
 
@@ -47,6 +52,8 @@ public class Tile : MonoBehaviour {
     {
         if (m_Core)
             StartPath();
+		if (m_Switch)
+			col.isTrigger = false;
 
         StartCoroutine("CourSetNext");
         
@@ -160,7 +167,7 @@ public class Tile : MonoBehaviour {
 
     IEnumerator RevertCheckDistance()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.1f);
         checkDistance = false;
       
     }
@@ -294,7 +301,7 @@ public class Tile : MonoBehaviour {
 				float angle = Mathf.Atan2 (vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
 				sprite.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
 
-			} else {
+			} else if (path2 != null){
 
 				Vector2 vectorToTarget = path2.transform.position - sprite.transform.position;
 				float angle = Mathf.Atan2 (vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
@@ -316,8 +323,20 @@ public class Tile : MonoBehaviour {
     void SetNextSwitch(GameObject next)
     {
         nextTile = next;
-       
-    }
+     }
+
+	void QueryNextTile(GameObject target){
+		if (m_Switch) {
+			if (m_Path1) 
+				target.SendMessage( "SetNextTile",path1);
+			else
+				target.SendMessage( "SetNextTile",path2);
+
+
+		}else if(nextTile != null)
+			target.SendMessage ("SetNextTile", nextTile);
+
+	}
 
 
 

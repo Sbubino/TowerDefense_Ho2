@@ -61,18 +61,10 @@ public class Enemy : MonoBehaviour {
 				GameController.instance.LoseEnergy(banishmentCost);
 				transform.position = spawn;
 				Debug.Log ("Fanculo");
+			}else{
+                currentTile = hit.collider.gameObject;
+				hit.collider.gameObject.SendMessage("QueryNextTile", gameObject);
 			}
-
-			else if (!hit.collider.CompareTag("Switch"))
-            {
-                currentTile = hit.collider.gameObject;
-                nextTile = currentTile.GetComponent<Tile>().GetNextTile().transform.position;
-            }
-			else
-            {
-                currentTile = hit.collider.gameObject;
-                nextTile = currentTile.GetComponent<Tile>().GetPositionNextTileSwitch().transform.position;
-            }
         }
 	
 

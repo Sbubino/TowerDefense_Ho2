@@ -57,10 +57,10 @@ public class turret : MonoBehaviour {
 			SetTarget();
 
 
-			Vector2 vectorToTarget = target.transform.position - sprite.transform.position;
-			float angle= Mathf.Atan2 (vectorToTarget.y, vectorToTarget.x)*Mathf.Rad2Deg;
-			Quaternion q=Quaternion.AngleAxis (angle,Vector3.forward);
-			sprite.transform.rotation = Quaternion.Slerp (sprite.transform.rotation,q, Time.deltaTime*rotationSpeed);
+//			Vector2 vectorToTarget = target.transform.position - sprite.transform.position;
+//			float angle= Mathf.Atan2 (vectorToTarget.y, vectorToTarget.x)*Mathf.Rad2Deg;
+//			Quaternion q=Quaternion.AngleAxis (angle,Vector3.forward);
+//			sprite.transform.rotation = Quaternion.Slerp (sprite.transform.rotation,q, Time.deltaTime*rotationSpeed);
             
 
             if (timer >= fireRate)

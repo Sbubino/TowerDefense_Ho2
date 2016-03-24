@@ -5,10 +5,16 @@ public class GameController : MonoBehaviour {
 
 	public static GameController instance;
 
-
+	public LayerMask m_Bottoniui;
 	public float nextWaveIn;
 	[HideInInspector]
 	public int maxWaveNumber;
+
+	public TweenScale turretMenu;
+	public GameObject currentTile;
+
+	[HideInInspector]
+	public bool openMenu;
 
 	public float EnergyUpTime;
 	public int EnergyUpValue;
@@ -26,7 +32,7 @@ public class GameController : MonoBehaviour {
 	int nextWaveControl = 0;
 	int indexWave = 0;
 	int localWaveIndex = 0;
-	float waveTimer;
+	float waveTimer = 100;
 
 
 	float nextEnergyDecreaseTimer = 0;
@@ -40,20 +46,32 @@ public class GameController : MonoBehaviour {
 		//currentEnergy = maxEnergy;
 		currentEnergy = 150;
 
-		WaveBuild ();	
+		//WaveBuild ();	
 		SpawnpointBuild ();
 	}
 	
 
 	void Update () {
-		WaveControl ();
+		//WaveControl ();
 		EnergyControl ();
-		Debug.Log (currentEnergy);
+		ClickSelect ();
 		if (Input.GetKeyDown(KeyCode.S))
 			Time.timeScale = 2;
 
 		if (Input.GetKey(KeyCode.R))
 			Time.timeScale = 1;
+
+
+		if (openMenu && Input.GetMouseButtonDown (0)) {
+			if ( ClickSelect() != null &&  ClickSelect ().Equals(turretMenu.gameObject))
+				Debug.Log (ClickSelect().transform);
+			else	
+				turretMenu.ResetToBeginning ();
+		}
+
+
+
+
 	}
 
 
@@ -112,21 +130,21 @@ public class GameController : MonoBehaviour {
 
 
 	void SpawnpointBuild(){
-		SpawnHolder = GameObject.FindGameObjectWithTag ("Spawnpoint");
-		spawnPoint = new GameObject[SpawnHolder.transform.childCount];
-		for (int i = 0; i < SpawnHolder.transform.childCount; i++) {
-			spawnPoint [i] = SpawnHolder.transform.GetChild (i).gameObject;
-		}
+		//SpawnHolder = GameObject.FindGameObjectWithTag ("Spawnpoint");
+//		spawnPoint = new GameObject[SpawnHolder.transform.childCount];
+		//for (int i = 0; i < SpawnHolder.transform.childCount; i++) {
+		//	spawnPoint [i] = SpawnHolder.transform.GetChild (i).gameObject;
+		//}
 	}
 
 
 
-	void WaveControl(){
+	public void WaveControl(int waveLenght){
 		//gestione dei due metodi precedenti
 		SetNextWave();
-		if (indexWave <= wave.Length) {
+		if (indexWave <= waveLenght) {
 			if (nextWaveControl < indexWave) {
-				StartNextWave ();
+				StartNextWave (waveLenght);
 				nextWaveControl = indexWave;	
 			}
 		}
@@ -138,19 +156,23 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
-	void StartNextWave(){	
-		if (localWaveIndex < wave.Length) {
-			for (int i = 0; i < spawnPoint.Length; i++) {
-				if (spawnPoint [i].activeSelf) {
+	void StartNextWave(int waveLenght){			
 
-					if (wave [localWaveIndex].GetComponent<Wave> ().activator != 0) 
-						break;					
-				
-				    wave [localWaveIndex].GetComponent<Wave> ().StartWave (spawnPoint [i]);
-					if (localWaveIndex < wave.Length - 1)
+
+		if (localWaveIndex < waveLenght) {
+			for (int i = 1; i < spawnPoint.Length; i++) {
+				if (spawnPoint [0].activeSelf) {
+					spawnPoint [0].GetComponent<Spawnpoint> ().StartWave (localWaveIndex);
+
+
+				if (spawnPoint [i].activeSelf) {
+					spawnPoint [i].GetComponent<Spawnpoint> ().StartWave (localWaveIndex);
+				}	
+
+					if (localWaveIndex < waveLenght - 1)
 					localWaveIndex++;
 				}
-			}
+			}			
 		}
 	}
 
@@ -158,9 +180,30 @@ public class GameController : MonoBehaviour {
 		waveTimer += Time.deltaTime;
 		//periodicamente si attiva l'ondata successiva
 
-		if (waveTimer >= nextWaveIn) {			
+		if (waveTimer >= nextWaveIn) {					
 			indexWave++;
 			waveTimer = 0;
 		}
+
 	}
+
+	GameObject ClickSelect()
+	{
+		//Converting Mouse Pos to 2D (vector2) World Pos
+		Vector3 rayPos = new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x , Camera.main.ScreenToWorldPoint(Input.mousePosition).y, -0.5f);
+		RaycastHit hit;
+
+		if (Physics.Raycast (rayPos, Vector3.forward, out hit, m_Bottoniui)) {
+
+			if (hit.transform.gameObject != null) {
+
+				return hit.transform.gameObject;
+			}
+			else return null;
+		}
+		else return null;
+	}
+	
+	
+
 }
