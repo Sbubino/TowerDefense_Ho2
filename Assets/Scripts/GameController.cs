@@ -62,10 +62,10 @@ public class GameController : MonoBehaviour {
 			Time.timeScale = 1;
 
 
+
 		if (openMenu && Input.GetMouseButtonDown (0)) {
-			if ( ClickSelect() != null &&  ClickSelect ().Equals(turretMenu.gameObject))
-				Debug.Log (ClickSelect().transform);
-			else	
+			if (! (ClickSelect() != null &&  ClickSelect ().CompareTag("BottoniUI")))
+		
 				turretMenu.ResetToBeginning ();
 		}
 
@@ -82,6 +82,13 @@ public class GameController : MonoBehaviour {
 	public void TakeEnergy (int incremento){
 		currentEnergy = currentEnergy + (Mathf.Round(incremento) * moltiplicatoreEnergy);
 	}
+
+   public void CloseMenu()
+    {
+        turretMenu.ResetToBeginning();
+    }
+
+
 
 	void EnergyControl (){
 		//aumenta con il tempo
@@ -136,10 +143,14 @@ public class GameController : MonoBehaviour {
 			spawnPoint [i] = SpawnHolder.transform.GetChild (i).gameObject;
 		}
 	}
+    public void BuildTurret(GameObject name)
+    {
+
+        currentTile.SendMessage("BuildTurret", name);
+    }
 
 
-
-	public void WaveControl(int waveLenght){
+    public void WaveControl(int waveLenght){
 		//gestione dei due metodi precedenti
 		SetNextWave();
 		if (indexWave <= waveLenght) {
@@ -203,7 +214,8 @@ public class GameController : MonoBehaviour {
 		}
 		else return null;
 	}
-	
+
+  
 	
 
 }
