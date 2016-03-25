@@ -130,11 +130,11 @@ public class GameController : MonoBehaviour {
 
 
 	void SpawnpointBuild(){
-		//SpawnHolder = GameObject.FindGameObjectWithTag ("Spawnpoint");
-//		spawnPoint = new GameObject[SpawnHolder.transform.childCount];
-		//for (int i = 0; i < SpawnHolder.transform.childCount; i++) {
-		//	spawnPoint [i] = SpawnHolder.transform.GetChild (i).gameObject;
-		//}
+    SpawnHolder = GameObject.FindGameObjectWithTag ("Spawnpoint");
+		spawnPoint = new GameObject[SpawnHolder.transform.childCount];
+		for (int i = 0; i < SpawnHolder.transform.childCount; i++) {
+			spawnPoint [i] = SpawnHolder.transform.GetChild (i).gameObject;
+		}
 	}
 
 
