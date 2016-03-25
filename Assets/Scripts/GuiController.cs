@@ -15,11 +15,22 @@ public class GuiController : MonoBehaviour {
 		NextEnergyTime.text = "NEXT ENERGY IN : " + GameController.instance.EnergyUpTime;	
 	}
 
-    public void level()
+    public void Level1()
     {
-        Application.LoadLevel(NumberOfLevel);
+        Application.LoadLevel(1);
+    }
+    public void Level2()
+    {
+        Application.LoadLevel(2);
+    }
+    public void Level3()
+    {
+        Application.LoadLevel(3);
+    }
+    public void Quit()
+    {
+        Application.Quit();
     }
 
-
-
+   
 }
