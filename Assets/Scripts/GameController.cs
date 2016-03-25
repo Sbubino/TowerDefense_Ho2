@@ -24,6 +24,8 @@ public class GameController : MonoBehaviour {
 	public int maxEnergy;
 	[HideInInspector]
 	public float currentEnergy;
+	[HideInInspector]
+	public float waveTimer;
 
 	GameObject SpawnHolder;
 	GameObject[] spawnPoint;
@@ -32,7 +34,7 @@ public class GameController : MonoBehaviour {
 	int nextWaveControl = 0;
 	int indexWave = 0;
 	int localWaveIndex = 0;
-	float waveTimer = 100;
+
 
 
 	float nextEnergyDecreaseTimer = 0;
@@ -45,6 +47,7 @@ public class GameController : MonoBehaviour {
 		moltiplicatoreEnergy = 1f;
 		//currentEnergy = maxEnergy;
 		currentEnergy = 150;
+		waveTimer = nextWaveIn - 2;
 
 		//WaveBuild ();	
 		SpawnpointBuild ();
