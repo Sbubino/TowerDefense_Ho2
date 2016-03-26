@@ -135,7 +135,7 @@ public class GameController : MonoBehaviour {
 		for (int i = 0; i < waveHolder.transform.childCount; i++) {
 			wave [i] = waveHolder.transform.GetChild (i).gameObject;
 		}
-		maxWaveNumber = wave.Length;
+
 	}
 
 
@@ -155,7 +155,10 @@ public class GameController : MonoBehaviour {
 
     public void WaveControl(int waveLenght){
 		//gestione dei due metodi precedenti
+		maxWaveNumber = waveLenght;
+
 		SetNextWave();
+
 		if (indexWave <= waveLenght) {
 			if (nextWaveControl < indexWave) {
 				StartNextWave (waveLenght);

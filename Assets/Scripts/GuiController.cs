@@ -14,7 +14,10 @@ public class GuiController : MonoBehaviour {
 	public GameObject x2;
 	public GameObject xx2;
 
+	public GameObject NextWaveFlash;
+
 	bool gameStarted;
+	float timer = 0;
 
 
 	void Awake(){
@@ -29,8 +32,11 @@ public class GuiController : MonoBehaviour {
 	void Update () {
 		EnergyBar ();
 
-		Debug.Log (Time.timeScale);
+
+		FlashWave ();
+		//Debug.Log (Time.timeScale);
 	}
+
 
 
 	void EnergyBar(){
@@ -71,6 +77,7 @@ public class GuiController : MonoBehaviour {
 		}
 	}
 
+
 	public void NextWavebutton(){
 		GameController.instance.waveTimer += 100; 
 		if (!gameStarted) {
@@ -80,4 +87,24 @@ public class GuiController : MonoBehaviour {
 		
 	}
 		
+
+	void FlashWave(){
+		if (!gameStarted) {
+			timer += Time.unscaledDeltaTime;
+
+			if (timer >= 0.5) {
+			
+				NextWaveFlash.SetActive (false);
+
+				if (timer >= 1) {
+				
+					NextWaveFlash.SetActive (true);
+	
+					timer = 0;
+				}
+			}
+		}
+	}
+ 
+
 }
