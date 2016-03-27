@@ -8,10 +8,21 @@ public class MenuController : MonoBehaviour {
     public int NumberOfLevel;
 	public UIPanel start;
 	public UIPanel Credits;
+	public float TimerCredits;
+	private bool StartTimer = false;
+	private float BaseTimer = 0.00f;
 
-	// Update is called once per frame
-	void Update () {
+	void Update()
+	{
+		if (StartTimer == true) 
+		{
 
+			if(Time.time >= BaseTimer)
+			{
+				start.gameObject.SetActive(true);
+				StartTimer = false;
+			}
+		}
 	}
 
     public void Level1()
@@ -37,8 +48,8 @@ public class MenuController : MonoBehaviour {
 	}
 	public void EndCredit()
 	{
-		start.gameObject.SetActive (true);
-
+		StartTimer = true;
+		BaseTimer = Time.time + TimerCredits;
 	}
    
 }
