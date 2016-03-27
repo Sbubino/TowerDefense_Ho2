@@ -6,7 +6,9 @@ using UnityEngine.UI;
 public class MenuController : MonoBehaviour {
 	
     public int NumberOfLevel;
-	
+	public UIPanel start;
+	public UIPanel Credits;
+
 	// Update is called once per frame
 	void Update () {
 
@@ -28,6 +30,15 @@ public class MenuController : MonoBehaviour {
     {
         Application.Quit();
     }
+	public void setActive()
+	{
+		start.gameObject.SetActive (false);
 
+	}
+	public void EndCredit()
+	{
+		start.gameObject.SetActive (true);
+
+	}
    
 }
