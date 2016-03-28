@@ -8,6 +8,11 @@ public class LoadingScreen : MonoBehaviour {
 
 	private int LevelToLoad;
 
+	public float MoveSpeed;
+	public GameObject[] Sheet;
+
+	public float Timer=0.0f;
+
 	void Awake()
 	{
 		LevelToLoad = MenuController.NumberOfLevel;
@@ -17,7 +22,7 @@ public class LoadingScreen : MonoBehaviour {
 
 
 
-    IEnumerator Loading()
+  /*  IEnumerator Loading()
     {
         AsyncOperation async = Application.LoadLevelAsync(LevelToLoad);
         while(!async.isDone)
@@ -29,14 +34,31 @@ public class LoadingScreen : MonoBehaviour {
         yield return async;
 
     }
-
+*/
 
     void Update () 
 	{
-	
-        StartCoroutine(Loading());
-    }
+		Move();
+		if(Time.time >= Timer)
+		{
+			loadLevel();
+		}
 
+    //    StartCoroutine(Loading());
+    }
+	void Move()
+	{
+		Sheet[0].transform.Translate(Sheet[0].transform.right * MoveSpeed * Time.deltaTime);
+		Sheet[1].transform.Translate(Sheet[1].transform.right * MoveSpeed * Time.deltaTime);
+		Sheet[2].transform.Translate(Sheet[2].transform.right * MoveSpeed * Time.deltaTime);
+		Sheet[3].transform.Translate(Sheet[3].transform.right * MoveSpeed * Time.deltaTime);
+	}
+
+
+	void loadLevel()
+	{
+		Application.LoadLevel(LevelToLoad);
+	}
     /*IEnumerator Loading()
     {
         AsyncOperation myasync = Application.LoadLevelAsync("ProvaTexture");
