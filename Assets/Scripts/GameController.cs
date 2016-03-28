@@ -40,6 +40,9 @@ public class GameController : MonoBehaviour {
 	float nextEnergyDecreaseTimer = 0;
 	float energyTimer = 0;
 
+	public GameObject FatMan;
+	private SpriteRenderer fatMan;
+	public Sprite[] CiccioneSprite;
 
 	void Awake() {
 		instance = this;	
@@ -170,7 +173,7 @@ public class GameController : MonoBehaviour {
 		//stabilisco la fine della partita 
 		if (indexWave >= maxWaveNumber) {
 			if(GameObject.FindWithTag ("Enemy") == null)
-				Debug.Log ("LivelloFinito");
+				GuiController.instance.win = true;
 		}
 	}
 
@@ -225,6 +228,20 @@ public class GameController : MonoBehaviour {
     }
 
 
-
+	void changeSprite()
+	{
+		if(currentEnergy >= 150)
+		{
+			fatMan.sprite = CiccioneSprite[0];
+		}
+		if(currentEnergy <= 149)
+		{
+			fatMan.sprite = CiccioneSprite[1];
+		}
+		if(currentEnergy <= 75)
+		{
+			fatMan.sprite = CiccioneSprite[2];
+		}
+	}
 
 }
