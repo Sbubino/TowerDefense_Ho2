@@ -4,13 +4,19 @@ using UnityEngine.UI;
 
 
 public class MenuController : MonoBehaviour {
-	
-    public int NumberOfLevel;
+	[HideInInspector]
+    public static int NumberOfLevel;
 	public UIPanel start;
 	public UIPanel Credits;
 	public float TimerCredits;
 	private bool StartTimer = false;
 	private float BaseTimer = 0.00f;
+
+
+	void Awake()
+	{
+		DontDestroyOnLoad(this);
+	}
 
 	void Update()
 	{
@@ -27,15 +33,18 @@ public class MenuController : MonoBehaviour {
 
     public void Level1()
     {
-        Application.LoadLevel(1);
+        Application.LoadLevel("Loading");
+		NumberOfLevel = 1;
     }
     public void Level2()
     {
-        Application.LoadLevel(2);
+		Application.LoadLevel("Loading");
+		NumberOfLevel = 2;
     }
     public void Level3()
     {
-        Application.LoadLevel(3);
+		Application.LoadLevel("Loading");
+		NumberOfLevel = 3;
     }
     public void Quit()
     {
