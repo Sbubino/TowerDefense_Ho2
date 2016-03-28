@@ -10,7 +10,7 @@ public class Enemy : MonoBehaviour {
     public float distance = 1.8f;
     public int AddEnergy;
 
-
+    GameObject[] sprites;
     bool inTurretRange;
     float tileWalked = 0f;
     int switchPriority = 0;
@@ -18,6 +18,7 @@ public class Enemy : MonoBehaviour {
     RaycastHit2D[] possibleTile;
     Vector2 nextTile;
     GameObject currentTile;
+    int distToCore;
     Vector3 spawn;
     GameObject lastTurret;
     float timer;
@@ -27,6 +28,12 @@ public class Enemy : MonoBehaviour {
     {
         nextTile = Vector2.zero;
 
+        sprites = new GameObject[4];
+
+        for(int i = 0; i < sprites.Length; i ++)
+        {
+            sprites[i] = transform.GetChild(i).gameObject;
+        }
 
 
     }
@@ -63,6 +70,7 @@ public class Enemy : MonoBehaviour {
 				//Debug.Log ("Fanculo");
 			}else{
                 currentTile = hit.collider.gameObject;
+                distToCore = hit.collider.gameObject.GetComponent<Tile>().GetDistanceToCore();
 				hit.collider.gameObject.SendMessage("QueryNextTile", gameObject);
 			}
         }
@@ -91,13 +99,14 @@ public class Enemy : MonoBehaviour {
 
         // transform.Translate(Vector3.zero);
         if (nextTile != Vector2.zero)
-        transform.position =  Vector2.Lerp(transform.position, nextTile,(Speed * Time.deltaTime) / Vector2.Distance(nextTile, transform.position)) ;  
+        transform.position =  Vector2.Lerp(transform.position, nextTile,(Speed * Time.deltaTime) / Vector2.Distance(nextTile, transform.position)) ;
+        ChangeSprites();
         //transform.Translate(nextTile * Time.deltaTime * Speed);
     }
 
     public int DistToCore()
     {
-        return currentTile.GetComponent<Tile>().GetDistanceToCore();
+        return distToCore;
     }
 
     public void TakeDamage(int amount)
@@ -133,6 +142,39 @@ public class Enemy : MonoBehaviour {
     void OnDisable()
     {
    //     GameController.instance.TakeEnergy(AddEnergy);
+    }
+
+    void ChangeSprites()
+    {
+        if(currentTile.transform.position.x > nextTile.x)
+        {
+            ActivateSprites(0);
+        }
+        else if (currentTile.transform.position.x < nextTile.x)
+        {
+            ActivateSprites(1);
+        }
+        else if (currentTile.transform.position.y > nextTile.y)
+        {
+            ActivateSprites(2);
+        }
+        else if (currentTile.transform.position.y < nextTile.y)
+        {
+            ActivateSprites(3);
+        }
+
+
+    }
+
+    void ActivateSprites(int index)
+    {
+        for(int i = 0; i< sprites.Length; i++)
+        {
+            if (i == index)
+                sprites[i].SetActive(true);
+            else
+                sprites[i].SetActive(false);
+        }
     }
 
 

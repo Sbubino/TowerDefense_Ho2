@@ -73,6 +73,7 @@ public class GameController : MonoBehaviour {
 			if (! (ClickSelect() != null &&  ClickSelect ().CompareTag("BottoniUI")))
 		
 				turretMenu.ResetToBeginning ();
+                openMenu = false;
 		}
 
 
