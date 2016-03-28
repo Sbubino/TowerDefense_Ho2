@@ -25,12 +25,14 @@ public class GuiController : MonoBehaviour {
 
 	public GameObject pauseScreen;
 	public GameObject winScreen;
+	public GameObject loseScreen;
 
 	[HideInInspector]
 	public int waveIndex = 0;
 	[HideInInspector]
 	public bool win = false;
-
+	[HideInInspector]
+	public bool lose = false;
 
 	int waveLenght;
 	bool gameStarted;
@@ -49,6 +51,7 @@ public class GuiController : MonoBehaviour {
 
 		pauseScreen.SetActive (false);
 		winScreen.SetActive (false);
+		loseScreen.SetActive (false);
 
 
 	}
@@ -63,6 +66,9 @@ public class GuiController : MonoBehaviour {
 
 		if (win)
 			winScreen.SetActive (true);
+
+		if (lose)
+			loseScreen.SetActive (true);
 	
 	}
 

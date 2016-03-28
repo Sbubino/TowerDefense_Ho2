@@ -114,7 +114,7 @@ public class GameController : MonoBehaviour {
 			currentEnergy = maxEnergy;
 
 		if (currentEnergy < 0) {
-			Debug.Log ("Hai perso,sei una sega!");
+			GuiController.instance.lose = true;
 		}
 	}	  
 
