@@ -28,6 +28,8 @@ public class Wave : MonoBehaviour {
 	public void StartWave(GameObject spawn){
 		activator++;
 		spawnPoint = spawn;
+
+		GuiController.instance.waveIndex++;
 	}
 
 	void GetChildInArray (){

@@ -146,6 +146,7 @@ public class GameController : MonoBehaviour {
 			spawnPoint [i] = SpawnHolder.transform.GetChild (i).gameObject;
 		}
 	}
+
     public void BuildTurret(GameObject name)
     {
 

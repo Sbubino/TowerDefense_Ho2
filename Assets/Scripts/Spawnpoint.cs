@@ -2,16 +2,23 @@
 using System.Collections;
 
 public class Spawnpoint : MonoBehaviour {
+	public static Spawnpoint instance;
 
 	public GameObject waveHolder;
 
-	GameObject[] wave;
+	[HideInInspector]
+	public GameObject[] wave;
+
 	int maxWaveNumber;
 
 
 	void Awake(){
+		instance = this;
+
+
 		WaveBuild ();
 	}
+
 	void Update(){
 		GameController.instance.WaveControl (wave.Length);
 	}

@@ -4,7 +4,9 @@ using UnityEngine.UI;
 
 
 public class GuiController : MonoBehaviour {
-	
+
+	public static GuiController instance;
+
 	public UILabel energyValue;
 	public UISlider energyBar;
 
@@ -16,17 +18,31 @@ public class GuiController : MonoBehaviour {
 
 	public GameObject NextWaveFlash;
 
+	public UILabel waveNuber;
+	public UILabel waveTimer;
+	public GameObject bossIcon;
+	public GameObject normalIcon;
+
+	[HideInInspector]
+	public int waveIndex = 0;
+
+
+	int waveLenght;
 	bool gameStarted;
 	float timer = 0;
 
 
 	void Awake(){
+		instance = this;
 		Time.timeScale = 0;
 	  
 		gameStarted = false;
+		bossIcon.SetActive (false);
 
 		play.SetActive (false);
 		xx2.SetActive (false);
+
+
 	}
 
 	void Update () {
@@ -34,10 +50,22 @@ public class GuiController : MonoBehaviour {
 
 
 		FlashWave ();
-		//Debug.Log (Time.timeScale);
+
+		TakeNextWave ();	
 	}
 
+	void TakeNextWave(){
+		
+	/*	if (GameObject.FindWithTag ("Boss") != null) {
+			normalIcon.SetActive (false);
+			bossIcon.SetActive (true);
+		}*/
 
+		waveLenght = Spawnpoint.instance.wave.Length - waveIndex;
+		waveNuber.text =  waveLenght.ToString();
+	
+
+	}
 
 	void EnergyBar(){
 		energyValue.text = "" + GameController.instance.currentEnergy + " / " + GameController.instance.maxEnergy;
