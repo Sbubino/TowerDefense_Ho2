@@ -25,6 +25,9 @@ public class Tile : MonoBehaviour {
     GameObject sprite;
     float timer;
 	BoxCollider2D col;
+	float timerSwitch;
+
+    bool lastTile;
 
 
     void Awake()
@@ -36,7 +39,7 @@ public class Tile : MonoBehaviour {
             distanceToCore = 0;
             nextTile = gameObject;
         }
-        walkableTileMask = 1 << 8;
+       
 
         SetNextTilePosition();
         if (m_Switch) {
@@ -45,6 +48,7 @@ public class Tile : MonoBehaviour {
 		}
 
         checkDistance = false;
+		timerSwitch = 0.5f;
 
     }
 
@@ -55,35 +59,36 @@ public class Tile : MonoBehaviour {
 		if (m_Switch)
 			col.isTrigger = false;
 
-        StartCoroutine("CourSetNext");
+       // StartCoroutine("CourSetNext");
         
         //Debug.Log("Tile : " + transform + "Next Tile" + nextTile);
     }
 
     void Update() {
-        //if (m_Switch)
-          //  Debug.Log("Switch : " + gameObject.transform + " Path1 " + path1.transform + " Path2 " + path2.transform  );
-            
-       
-      
+       // if (m_Switch)
+         //   Debug.Log("Switch : " + checkDistance  );
+		//if (transform.name.Equals ("Switch") )
+			//Debug.Log (path1 + "  " + path2);
+		timerSwitch += Time.deltaTime;
+       // if (transform.name.Equals("Tile (5)") || transform.name.Equals("Tile (88)") || transform.name.Equals("Tile (72)"))
+         //   Debug.Log(transform + " " + distanceToCore );
 
-        
-           
-        
+
+
+
     }
 
-    void OnMouseDown() {
-        Switch();
-		GameController.instance.LoseEnergy(switchEnergyCost);
-    }
+    
 
 
     void SetNextTilePosition()
     {
-        nearTile = Physics2D.BoxCastAll(transform.position, new Vector2(transform.localScale.x + 0.5f, transform.localScale.y + 0.5f), 0f, new Vector2(), 0f, walkableTileMask);
+        nearTile = Physics2D.BoxCastAll(transform.position, new Vector2(transform.localScale.x + 0.5f, transform.localScale.y + 0.5f), 0f, Vector3.zero, 0f, walkableTileMask);
 
         positionNextTile = new GameObject[nearTile.Length];
 
+		//if(transform.name.Equals ("Tile (81)"))
+		//	Debug.Log(nearTile.Length);	
 
 
         for (int i = 0; i < nearTile.Length; i++)
@@ -97,6 +102,7 @@ public class Tile : MonoBehaviour {
 
                         if (positionNextTile[j] == null)
                         {
+
                             positionNextTile[j] = nearTile[i].transform.gameObject;
                             break;
                         }
@@ -113,17 +119,28 @@ public class Tile : MonoBehaviour {
         for (int i = 0; i < positionNextTile.Length; i++)
         {
 
-            if (temp == null)
+            if (temp == null && !positionNextTile[i].gameObject.CompareTag("Switch"))
             {
                 temp = positionNextTile[i];
-               // Debug.Log("Tile :  " + transform + " NearTIle : " + positionNextTile[i].transform + "Distance to core : " + positionNextTile[i].GetComponent<Tile>().GetDistanceToCore());
+                // Debug.Log("Tile :  " + transform + " NearTIle : " + positionNextTile[i].transform + "Distance to core : " + positionNextTile[i].GetComponent<Tile>().GetDistanceToCore());
             }
-            else if (positionNextTile[i] != null && !positionNextTile[i].CompareTag("Switch"))
+            else if (positionNextTile[i] != null && !positionNextTile[i].gameObject.CompareTag("Switch"))
             {
                 if (positionNextTile[i] != null && positionNextTile[i].GetComponent<Tile>().GetDistanceToCore() < temp.GetComponent<Tile>().GetDistanceToCore())
-                   temp = positionNextTile[i];
-                 //Debug.Log("Tile :  " + transform + " NearTIle : " + positionNextTile[i].transform + "Distance to core : " + positionNextTile[i].GetComponent<Tile>().GetDistanceToCore());
+                    temp = positionNextTile[i];
+
+
+                //Debug.Log("Tile :  " + transform + " NearTIle : " + positionNextTile[i].transform + "Distance to core : " + positionNextTile[i].GetComponent<Tile>().GetDistanceToCore());
             }
+            else if (positionNextTile[i] != null && positionNextTile[i].GetComponent<Tile>().checkDistance)
+            {
+                
+                temp = positionNextTile[i];
+            }
+                
+               
+            
+
             
         }
 
@@ -165,86 +182,124 @@ public class Tile : MonoBehaviour {
         
     }
 
+    void RevertCheck()
+    {
+        if (!m_Core) {
+
+            checkDistance = false;
+            if(nextTile == null)
+                SetNext();
+
+            nextTile.SendMessage("RevertCheck");
+
+           
+        }
+    }
+
     IEnumerator RevertCheckDistance()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForEndOfFrame();
         checkDistance = false;
+        nextTile.SendMessage("RevertCheck");
       
     }
 
     IEnumerator CourSetNext()
     {
-        yield return new WaitForSeconds(0.2f);
-        SetNext();
+       yield return new WaitForSeconds(0.2f);
+        //SetNext();
     }
 
 
     public void SetDistanceCore(int distance)
 	{
 			distanceToCore = distance + 1;
+           
             checkDistance = true;
-             StartCoroutine("RevertCheckDistance");
-
-
-			for (int i = 0; i < positionNextTile.Length; i++) {
+            lastTile = false;
+        //StartCoroutine("RevertCheckDistance");
+       
+        for (int i = 0; i < positionNextTile.Length; i++) {
+				
 				if (positionNextTile [i] != null) {
-
+					
 					if (positionNextTile [i].CompareTag ("Tile")) {
 						if (!positionNextTile [i].GetComponent<Tile> ().CheckDistanceToCore ()) {
+                        
+                            lastTile = true;
 
-							positionNextTile [i].SendMessage ("SetDistanceCore", distanceToCore);
+                            positionNextTile [i].SendMessage ("SetDistanceCore", distanceToCore);
 						}
-					}else if (positionNextTile [i].CompareTag ("Switch")) {
-                    if (!positionNextTile[i].GetComponent<Tile>().CheckDistanceToCore())
-                         positionNextTile [i].SendMessage ("SetDistanceCoreSwitch", this.gameObject);
 
+					}else if (positionNextTile [i].CompareTag ("Switch")) {
+                     if (!positionNextTile[i].GetComponent<Tile>().CheckDistanceToCore())
+
+                        positionNextTile [i].SendMessage ("SetDistanceCoreSwitch", this.gameObject);
+                    
 					}
 				}
 
 			}
+
+        if (!lastTile)
+        {
+            
+            SetNext();
+           // Debug.Log("lasTile " + transform + " next  " + nextTile );
+            StartCoroutine("RevertCheckDistance");
+        }
+
 	}
 
 
 
-	public void SetDistanceCoreSwitch(GameObject tile)
-	{
-        
-        if (distanceToCore1 == -1) {
-			distanceToCore1 = tile.GetComponent<Tile>().GetDistanceToCore() + 1;
-			path1 = tile;
-		} else {
 
-            checkDistance = true;
+	public IEnumerator SetDistanceCoreSwitch(GameObject tile)
+	{
+        yield return new WaitForEndOfFrame();
+          if (distanceToCore1 == -1) {
+
+			distanceToCore1 = tile.GetComponent<Tile>().GetDistanceToCore() + 1;
+           
+			path1 = tile;
+		} else if(distanceToCore2 == -1) {
+
+          
             distanceToCore2 = tile.GetComponent<Tile>().GetDistanceToCore() + 1;
+           
 			path2 = tile;
 		}
 
-
-
         if (path1 != null && path2 != null)
         {
+           
+
             if (m_Path1)
+            {
                 distanceToCore = distanceToCore1;
-            else
+                nextTile = path1;
+            }
+            else {
                 distanceToCore = distanceToCore2;
+                nextTile = path2;
+            }
+
+           
 
             for (int i = 0; i < positionNextTile.Length; i++)
             {
-                if (positionNextTile[i].transform.position != path1.transform.position && positionNextTile[i].transform.position != path2.transform.position && positionNextTile[i] != null)
-                {
+                if (positionNextTile[i] != null && !positionNextTile[i].transform.name.Equals(path1.transform.name) && !positionNextTile[i].transform.name.Equals(path2.transform.name))
+                {                   
+                    checkDistance = true;
+                    Debug.Log("tile problema " + positionNextTile[i] + "Path1 : " + path1 + "Path 2 : " + path2);
 
-                    StartCoroutine("CorSetNext", positionNextTile[i]);
-
-                    if (m_Path1)
-                        positionNextTile[i].SendMessage("SetDistanceCore", distanceToCore1);
-                    else
-                        positionNextTile[i].SendMessage("SetDistanceCore", distanceToCore2);
-                    break;
+                    positionNextTile[i].SendMessage("SetDistanceCore", distanceToCore);
                 }
+                    
             }
+
         }
-     
-	    RotateSprite ();
+            RotateSprite();
 	}
 
   
@@ -255,47 +310,50 @@ public class Tile : MonoBehaviour {
 		{
 			if(positionNextTile[i] != null){
 				positionNextTile[i].SendMessage("SetDistanceCore", distanceToCore);
-				break;
+				
 			}
 		}
 		
 	}
 
-	void Switch(){
-		m_Path1 = !m_Path1;
+	public void Switch(){
+		if (timerSwitch >= 0.5f) {
+			GameController.instance.LoseEnergy (switchEnergyCost);
+			m_Path1 = !m_Path1;
 
-        if (distanceToCore == distanceToCore1)
-            distanceToCore = distanceToCore2;
-        else
-            distanceToCore = distanceToCore1;
+            if (m_Path1)
+            {
+                distanceToCore = distanceToCore1;
+                nextTile = path1;
+            }
+            else {
+                distanceToCore = distanceToCore2;
+                nextTile = path2;
+            }
 
 
-        if (path1 != null && path2 != null)
-        {
-           
 
             for (int i = 0; i < positionNextTile.Length; i++)
             {
-                if (positionNextTile[i].transform.position != path1.transform.position && positionNextTile[i].transform.position != path2.transform.position && positionNextTile[i] != null)
+                if (positionNextTile[i] != null && positionNextTile[i].transform.position != path1.transform.position && positionNextTile[i].transform.position != path2.transform.position)
                 {
+                    checkDistance = true;
                    
-
-                    if (m_Path1)
-                        positionNextTile[i].SendMessage("SetDistanceCore", distanceToCore1);
-                    else
-                        positionNextTile[i].SendMessage("SetDistanceCore", distanceToCore2);
-                    break;
+                        Debug.Log("tile problema Switch " + positionNextTile[i]);
+                    positionNextTile[i].SendMessage("SetDistanceCore", distanceToCore);
                 }
+
             }
-        }
-        
-        RotateSprite ();
+
+            RotateSprite ();
+			timerSwitch = 0;
+		}
 	}
 
 	public void RotateSprite()
 	{
 		if (m_Switch) {
-			if (m_Path1) {
+			if (m_Path1 && path1 != null) {
 			
 				Vector2 vectorToTarget = path1.transform.position - sprite.transform.position;
 				float angle = Mathf.Atan2 (vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
@@ -327,10 +385,13 @@ public class Tile : MonoBehaviour {
 
 	void QueryNextTile(GameObject target){
 		if (m_Switch) {
-			if (m_Path1) 
+			if (m_Path1) {
+				Debug.Log(path1);
 				target.SendMessage( "SetNextTile",path1);
-			else
+			}
+			else{
 				target.SendMessage( "SetNextTile",path2);
+			}
 
 
 		}else if(nextTile != null)

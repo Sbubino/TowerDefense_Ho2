@@ -205,24 +205,26 @@ public class GameController : MonoBehaviour {
 
 	}
 
-	GameObject ClickSelect()
-	{
-		//Converting Mouse Pos to 2D (vector2) World Pos
-		Vector3 rayPos = new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x , Camera.main.ScreenToWorldPoint(Input.mousePosition).y, -0.5f);
-		RaycastHit hit;
+    GameObject ClickSelect()
+    {
+        //Converting Mouse Pos to 2D (vector2) World Pos
+        Vector2 rayPos = new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
 
-		if (Physics.Raycast (rayPos, Vector3.forward, out hit, m_Bottoniui)) {
+        RaycastHit2D hit = Physics2D.Raycast(rayPos, Vector2.zero, 5, m_Bottoniui);
 
-			if (hit.transform.gameObject != null) {
+        if (hit.transform != null)
+        {
+            return hit.transform.gameObject;
 
-				return hit.transform.gameObject;
-			}
-			else return null;
-		}
-		else return null;
-	}
 
-  
-	
+        }
+        else
+            return null;
+
+
+    }
+
+
+
 
 }

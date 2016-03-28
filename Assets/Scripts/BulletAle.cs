@@ -17,10 +17,13 @@ public class BulletAle : MonoBehaviour {
 	SpriteRenderer spriteExplosionAlpha;
 	GameObject sprite;
 	Collider2D col;
+	bool explose;
+	GameObject curTarget;
 
 	float[] slow;
 
 	void Awake(){
+		explose = false;
 		col = GetComponent<CircleCollider2D> ();
 		slow = new float[2];
 		if (m_AreaT) {
@@ -51,9 +54,11 @@ public class BulletAle : MonoBehaviour {
 		if (!m_AreaT)
 			StartCoroutine ("Disables");
 		else {
+			curTarget = null;
 			spriteExplosion.SetActive(false);
 			sprite.SetActive (true);
 			col.enabled = true;
+			explose = false;
 			//spriteExplosionAlpha.color = jesoo;
 
 		}
@@ -64,7 +69,7 @@ public class BulletAle : MonoBehaviour {
     void FixedUpdate()
     {
 //		Debug.Log (spriteExplosionAlpha.color.a);
-		if(target != null)
+		if(target != null && ! explose)
         	transform.position = Vector2.Lerp(transform.position, target.transform.position, m_Speed * Time.deltaTime);
     }
 
@@ -83,14 +88,17 @@ public class BulletAle : MonoBehaviour {
     void OnTriggerEnter2D (Collider2D col)
     {
 		if (col.gameObject.CompareTag ("Enemy")) {
+
 			if (!m_AreaT)
 				col.gameObject.SendMessage ("TakeDamage", m_Damage);
 
 			if (m_SlowBullet)
 				col.gameObject.SendMessage ("Slow", slow);
 
-			if (m_AreaT)
-				Explode ();
+			if (m_AreaT )
+						Explode ();
+
+
 
 
 			if(!m_AreaT)
@@ -106,10 +114,11 @@ public class BulletAle : MonoBehaviour {
     }
 
 	void Explode(){
-		
+		explose = true;
 		Collider2D[] enemyHit = Physics2D.OverlapCircleAll (transform.position, m_AreaExplosion, m_Enemy);
 		col.enabled = false;
 		sprite.SetActive (false);
+		spriteExplosion.transform.position = target.transform.position;
 		spriteExplosion.SetActive (true);
 
 	

@@ -24,14 +24,20 @@ public class BuildTile : MonoBehaviour {
 
 
    public void OnClick() {
-		GameController.instance.currentTile = gameObject;
 
-        if (!builded)
-        {
-            GameController.instance.turretMenu.gameObject.transform.position = gameObject.transform.position;
-            GameController.instance.turretMenu.PlayForward();
-            GameController.instance.openMenu = true;
-        }
+
+        if (!builded && !GameController.instance.openMenu) {
+			GameController.instance.currentTile = gameObject;
+			GameController.instance.turretMenu.gameObject.transform.position = gameObject.transform.position;
+			GameController.instance.turretMenu.PlayForward ();
+			GameController.instance.openMenu = true;
+		} /*else if (builded && !GameController.instance.openMenu) {
+			GameController.instance.currentTile = gameObject;
+			GameController.instance.upgradeMenu.gameObject.transform.position = gameObject.transform.position;
+			GameController.instance.upgradeMenu.PlayForward ();
+			GameController.instance.openMenu = true;
+
+		}*/
    }
 
 	public void BuildTurret(GameObject tipeTurret){
@@ -65,5 +71,15 @@ public class BuildTile : MonoBehaviour {
             GameController.instance.CloseMenu();
         }
     }
+
+	public void UpGrade(){
+		Debug.Log ("upgrade");
+
+	}
+
+	public void Sell(){
+		Debug.Log("sell");
+
+	}
 	
 }

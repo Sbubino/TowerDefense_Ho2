@@ -42,7 +42,7 @@ public class turret : MonoBehaviour {
     {
         timer += Time.deltaTime;
 
-	//	Debug.DrawRay (transform.position,target.transform.position - transform.position );
+		//Debug.DrawRay (transform.position,target.transform.position - transform.position );
 
        
     }
@@ -125,7 +125,7 @@ public class turret : MonoBehaviour {
 
     void Shoot()
     {
-       if (target.activeInHierarchy) {
+       if (target != null && target.activeInHierarchy) {
 
 			if (bulletPoolIndex < bulletPool.Length - 1) {
 				if (!bulletPool [bulletPoolIndex].activeInHierarchy) {
@@ -138,7 +138,7 @@ public class turret : MonoBehaviour {
 					bulletPoolIndex++;
 			} else
 				bulletPoolIndex = 0;
-		} else {
+		} else if (target != null) {
 			CancelEnemyArray(target.GetComponent<Collider2D>());
 			SetTarget ();
 
