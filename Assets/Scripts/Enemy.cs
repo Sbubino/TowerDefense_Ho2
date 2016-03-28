@@ -60,7 +60,7 @@ public class Enemy : MonoBehaviour {
 			if(hit.collider.CompareTag("Core")){
 				GameController.instance.LoseEnergy(banishmentCost);
 				transform.position = spawn;
-				Debug.Log ("Fanculo");
+				//Debug.Log ("Fanculo");
 			}else{
                 currentTile = hit.collider.gameObject;
 				hit.collider.gameObject.SendMessage("QueryNextTile", gameObject);

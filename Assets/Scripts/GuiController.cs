@@ -23,8 +23,13 @@ public class GuiController : MonoBehaviour {
 	public GameObject bossIcon;
 	public GameObject normalIcon;
 
+	public GameObject pauseScreen;
+	public GameObject winScreen;
+
 	[HideInInspector]
 	public int waveIndex = 0;
+	[HideInInspector]
+	public bool win = false;
 
 
 	int waveLenght;
@@ -42,6 +47,9 @@ public class GuiController : MonoBehaviour {
 		play.SetActive (false);
 		xx2.SetActive (false);
 
+		pauseScreen.SetActive (false);
+		winScreen.SetActive (false);
+
 
 	}
 
@@ -52,17 +60,26 @@ public class GuiController : MonoBehaviour {
 		FlashWave ();
 
 		TakeNextWave ();	
+
+		if (win)
+			winScreen.SetActive (true);
+	
 	}
 
 	void TakeNextWave(){
 		
-	/*	if (GameObject.FindWithTag ("Boss") != null) {
+		/*if (GameObject.FindWithTag ("Boss") != null) {
 			normalIcon.SetActive (false);
 			bossIcon.SetActive (true);
 		}*/
 
 		waveLenght = Spawnpoint.instance.wave.Length - waveIndex;
 		waveNuber.text =  waveLenght.ToString();
+
+		if (!gameStarted)
+			waveTimer.text = null;
+		else			
+		    waveTimer.text = (Mathf.RoundToInt( GameController.instance.nextWaveIn) - Mathf.RoundToInt (GameController.instance.waveTimer)).ToString ();
 	
 
 	}
@@ -78,7 +95,11 @@ public class GuiController : MonoBehaviour {
 
 			play.SetActive (true);
 			pause.SetActive (false);
+
+			pauseScreen.SetActive (true);
 		}
+
+
 	}
 
 	public void Play(){
@@ -90,6 +111,8 @@ public class GuiController : MonoBehaviour {
 
 			x2.SetActive (true);
 			xx2.SetActive (false);
+
+			pauseScreen.SetActive (false);
 		}
 	}
 
@@ -133,6 +156,16 @@ public class GuiController : MonoBehaviour {
 			}
 		}
 	}
- 
+
+
+	public void ToMainMenu(){
+
+		Application.LoadLevel ("Menù");
+	}
+
+	public void Retry(){
+
+		Application.LoadLevel (Application.loadedLevelName);
+	}
 
 }
