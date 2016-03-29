@@ -27,6 +27,9 @@ public class GuiController : MonoBehaviour {
 	public GameObject winScreen;
 	public GameObject loseScreen;
 
+	public GameObject sureQuit;
+	public GameObject sureRetry;
+
 	[HideInInspector]
 	public int waveIndex = 0;
 	[HideInInspector]
@@ -174,4 +177,28 @@ public class GuiController : MonoBehaviour {
 		Application.LoadLevel (Application.loadedLevelName);
 	}
 
+
+	public void SureQuit(){
+
+		sureQuit.SetActive (true);
+
+	}
+
+	public void SureQuit1(){
+
+		sureQuit.SetActive (false);
+
+	}
+
+	public void SureRetry(){
+
+		sureRetry.SetActive (true);
+
+	}
+
+	public void SureRetry1(){
+
+		sureRetry.SetActive (false);
+
+	}
 }
