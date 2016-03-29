@@ -11,6 +11,8 @@ public class GameController : MonoBehaviour {
 	public int maxWaveNumber;
 
 	public TweenScale turretMenu;
+	public TweenScale turretUpgrade;
+	[HideInInspector]
 	public GameObject currentTile;
 
 	[HideInInspector]
@@ -61,18 +63,14 @@ public class GameController : MonoBehaviour {
 		//WaveControl ();
 		EnergyControl ();
 		ClickSelect ();
-		if (Input.GetKeyDown(KeyCode.S))
-			Time.timeScale = 2;
-
-		if (Input.GetKey(KeyCode.R))
-			Time.timeScale = 1;
 
 
-
+		Debug.Log (openMenu);
 		if (openMenu && Input.GetMouseButtonDown (0)) {
 			if (! (ClickSelect() != null &&  ClickSelect ().CompareTag("BottoniUI")))
 		
 				turretMenu.ResetToBeginning ();
+				turretUpgrade.ResetToBeginning();
                 openMenu = false;
 		}
 
@@ -83,16 +81,18 @@ public class GameController : MonoBehaviour {
 
 
 	//gestione dell'energy
-	public void LoseEnergy (int costo){
+	public void LoseEnergy (float costo){
 		currentEnergy -= costo;
 	}
-	public void TakeEnergy (int incremento){
+	public void TakeEnergy (float incremento){
 		currentEnergy = currentEnergy + (Mathf.Round(incremento) * moltiplicatoreEnergy);
 	}
 
    public void CloseMenu()
     {
         turretMenu.ResetToBeginning();
+		turretUpgrade.ResetToBeginning ();
+		openMenu = false;
     }
 
 
@@ -156,6 +156,16 @@ public class GameController : MonoBehaviour {
 
         currentTile.SendMessage("BuildTurret", name);
     }
+
+	public void Upgrade(){
+
+		currentTile.SendMessage("UpGrade");
+
+	}
+
+	public void Sell(){
+		currentTile.SendMessage("Sell");
+	}
 
 
     public void WaveControl(int waveLenght){

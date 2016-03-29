@@ -8,7 +8,7 @@ public class Tile : MonoBehaviour {
     public bool m_Core;
     public bool m_Switch;
     public bool m_Path1;
-	public int switchEnergyCost;
+	public float switchEnergyCost;
 
     GameObject[] positionNextTile;
     RaycastHit2D[] nearTile;
@@ -291,7 +291,7 @@ public class Tile : MonoBehaviour {
                 if (positionNextTile[i] != null && !positionNextTile[i].transform.name.Equals(path1.transform.name) && !positionNextTile[i].transform.name.Equals(path2.transform.name))
                 {                   
                     checkDistance = true;
-                    Debug.Log("tile problema " + positionNextTile[i] + "Path1 : " + path1 + "Path 2 : " + path2);
+                    //Debug.Log("tile problema " + positionNextTile[i] + "Path1 : " + path1 + "Path 2 : " + path2);
 
                     positionNextTile[i].SendMessage("SetDistanceCore", distanceToCore);
                 }
@@ -356,7 +356,7 @@ public class Tile : MonoBehaviour {
 			if (m_Path1 && path1 != null) {
 			
 				Vector2 vectorToTarget = path1.transform.position - sprite.transform.position;
-				float angle = Mathf.Atan2 (vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
+				float angle = Mathf.Atan2 (vectorToTarget.y, vectorToTarget.x)  * Mathf.Rad2Deg +22;
 				sprite.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
 
 			} else if (path2 != null){

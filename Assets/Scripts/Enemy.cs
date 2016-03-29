@@ -146,7 +146,12 @@ public class Enemy : MonoBehaviour {
 
     void ChangeSprites()
     {
-        if(currentTile.transform.position.x > nextTile.x)
+
+           if (currentTile.transform.position.y < nextTile.y)
+        {
+            ActivateSprites(3);
+        }
+       else  if (currentTile.transform.position.x > nextTile.x )
         {
             ActivateSprites(0);
         }
@@ -154,14 +159,11 @@ public class Enemy : MonoBehaviour {
         {
             ActivateSprites(1);
         }
-        else if (currentTile.transform.position.y > nextTile.y)
+       /* else if (currentTile.transform.position.y > nextTile.y)
         {
             ActivateSprites(2);
-        }
-        else if (currentTile.transform.position.y < nextTile.y)
-        {
-            ActivateSprites(3);
-        }
+        }*/
+      
 
 
     }

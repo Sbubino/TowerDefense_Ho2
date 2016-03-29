@@ -3,9 +3,9 @@ using System.Collections;
 
 public class TurretUpgrade : MonoBehaviour {
 
-	public GameObject sprite1;
-	public GameObject sprite2;
-	public GameObject sprite3;
+	 GameObject sprite1;
+     GameObject sprite2;
+	 GameObject sprite3;
 
 	public float multiplierDamage1;
 	public float multiplierDamage2;
@@ -29,13 +29,14 @@ public class TurretUpgrade : MonoBehaviour {
 	public float slowAmmount;
 	public float explosionRange;
 	public float multiplierPowerUp1;
+	public float SellValue;
 
 	public bool upgrade1=false, upgrade2=false;
 
 	void Awake (){
-		sprite1 = transform.GetChild (0).gameObject;
-		sprite2 = transform.GetChild (1).gameObject;
-		sprite3 = transform.GetChild (2).gameObject;
+		sprite1 = transform.GetChild (0).GetChild (0).gameObject;
+		sprite2 = transform.GetChild (0).GetChild (1).gameObject;
+		sprite3 = transform.GetChild (0).GetChild (2).gameObject;
 		sprite1.SetActive (true);
 		sprite2.SetActive (false);
 		sprite3.SetActive (false);
@@ -62,7 +63,7 @@ public class TurretUpgrade : MonoBehaviour {
 
             turretDamage = turretDamage *= multiplierDamage2;
             range = range *= multiplierRange2;
-            upgradeCost = upgradeCost *= multiplierCost2;
+			upgradeCost = upgradeCost *= multiplierCost2;
             slowAmmount = slowAmmount *= multiplierSlow2;
             explosionRange = explosionRange *= multiplierExp2;
             
