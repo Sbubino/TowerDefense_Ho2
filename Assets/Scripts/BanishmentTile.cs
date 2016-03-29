@@ -29,10 +29,7 @@ public class BanishmentTile : MonoBehaviour {
         if(hit.collider != null)
         {
             hit.collider.GetComponent<Enemy>().Banishment();
-				if(isCore == false)
-				{
-					life -= 1;
-				}
+			Debug.Log ("super Jesoo è immenso");
         }
     }
 }

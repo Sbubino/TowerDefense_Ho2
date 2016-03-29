@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 
 public class MenuController : MonoBehaviour {
+	public int nextLevel;
 	[HideInInspector]
     public static int NumberOfLevel;
 	public UIPanel start;
@@ -60,5 +61,9 @@ public class MenuController : MonoBehaviour {
 		StartTimer = true;
 		BaseTimer = Time.time + TimerCredits;
 	}
-   
+	public void NextLevel()
+	{
+		NumberOfLevel = nextLevel;
+		Application.LoadLevel ("Loading");
+	}
 }
