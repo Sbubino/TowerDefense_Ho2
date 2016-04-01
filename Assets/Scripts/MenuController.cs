@@ -66,4 +66,9 @@ public class MenuController : MonoBehaviour {
 		NumberOfLevel = nextLevel;
 		Application.LoadLevel ("Loading");
 	}
+	public void MenuLevel()
+	{
+		NumberOfLevel = 0;
+		Application.LoadLevel("Loading");
+	}
 }

@@ -11,13 +11,14 @@ public class LoadingScreen : MonoBehaviour {
 	public float MoveSpeed;
 	public GameObject[] Sheet;
 
-	public float Timer=0.0f;
+	public float Timer;
 
 	void Awake()
 	{
+		Timer = Time.time + Timer;
 		LevelToLoad = MenuController.NumberOfLevel;
 		Destroy (GameObject.Find("MenuController"));
-		Debug.Log (LevelToLoad);
+		//Debug.Log (LevelToLoad);
 	}
 
 
