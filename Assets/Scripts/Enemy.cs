@@ -24,6 +24,8 @@ public class Enemy : MonoBehaviour {
     float timer;
 
 
+
+
     void Awake()
     {
         nextTile = Vector2.zero;
@@ -34,6 +36,8 @@ public class Enemy : MonoBehaviour {
         {
             sprites[i] = transform.GetChild(i).gameObject;
         }
+        
+
 
 
     }
@@ -147,23 +151,25 @@ public class Enemy : MonoBehaviour {
     void ChangeSprites()
     {
 
-           if (currentTile.transform.position.y < nextTile.y)
-        {
-            ActivateSprites(3);
-        }
-       else  if (currentTile.transform.position.x > nextTile.x )
-        {
-            ActivateSprites(0);
-        }
-        else if (currentTile.transform.position.x < nextTile.x)
-        {
-            ActivateSprites(1);
-        }
-       /* else if (currentTile.transform.position.y > nextTile.y)
+            if (currentTile.transform.position.y < nextTile.y)
+         {
+             ActivateSprites(3);
+         }
+        else  if (currentTile.transform.position.x > nextTile.x )
+         {
+             ActivateSprites(0);
+         }
+         else if (currentTile.transform.position.x < nextTile.x)
+         {
+             ActivateSprites(1);
+         }
+
+        else if (currentTile.transform.position.y>nextTile.y)
         {
             ActivateSprites(2);
-        }*/
-      
+        }
+     
+
 
 
     }
