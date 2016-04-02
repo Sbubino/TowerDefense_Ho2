@@ -51,7 +51,7 @@ public class GameController : MonoBehaviour {
 		//imposto i valori dell'energy iniziale
 		moltiplicatoreEnergy = 1f;
 		//currentEnergy = maxEnergy;
-		currentEnergy = 150;
+		currentEnergy = 300;
 		waveTimer = nextWaveIn - 2;
 
 		//WaveBuild ();	
@@ -64,14 +64,13 @@ public class GameController : MonoBehaviour {
 		EnergyControl ();
 		ClickSelect ();
 
-
 		Debug.Log (openMenu);
 		if (openMenu && Input.GetMouseButtonDown (0)) {
-			if (! (ClickSelect() != null &&  ClickSelect ().CompareTag("BottoniUI")))
-		
-				turretMenu.ResetToBeginning ();
-				turretUpgrade.ResetToBeginning();
-                openMenu = false;
+            Debug.Log(ClickSelect());
+            if (ClickSelect() == null || !ClickSelect().CompareTag("BottoniUI"))
+            {
+                CloseMenu();
+            }
 		}
 
 
@@ -90,9 +89,11 @@ public class GameController : MonoBehaviour {
 
    public void CloseMenu()
     {
+       
         turretMenu.ResetToBeginning();
 		turretUpgrade.ResetToBeginning ();
 		openMenu = false;
+        Debug.Log("CloseMenu" + openMenu);
     }
 
 
@@ -158,8 +159,8 @@ public class GameController : MonoBehaviour {
     }
 
 	public void Upgrade(){
-
-		currentTile.SendMessage("UpGrade");
+        Debug.Log("qui");
+        currentTile.SendMessage("UpGrade");
 
 	}
 

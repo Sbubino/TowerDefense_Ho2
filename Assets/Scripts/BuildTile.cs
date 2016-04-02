@@ -7,7 +7,8 @@ public class BuildTile : MonoBehaviour {
     public GameObject[] m_TurretPreab;
 
     GameObject[] turretPool;
-	TurretUpgrade turretUp;
+	Upgrade turretUp;
+    Turret curretTower;
     public bool builded;
 
 	public bool fast;
@@ -51,7 +52,7 @@ public class BuildTile : MonoBehaviour {
 			GameController.instance.turretMenu.PlayForward ();
 			GameController.instance.openMenu = true;
 		} else if (builded && !GameController.instance.openMenu) {
-			GameController.instance.openMenu = false;
+			GameController.instance.openMenu = true;
 			GameController.instance.currentTile = gameObject;
 			GameController.instance.turretUpgrade.gameObject.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z -1);
 			GameController.instance.turretUpgrade.PlayForward ();
@@ -70,32 +71,36 @@ public class BuildTile : MonoBehaviour {
         {
             builded = true;
             turretPool[1].SetActive(true);
-			turretUp = turretPool[1].GetComponent<TurretUpgrade>();
-			GameController.instance.LoseEnergy(80);
+			turretUp = turretPool[1].GetComponent<Upgrade>();
+            curretTower = turretPool[1].GetComponent<Turret>();
+            GameController.instance.LoseEnergy(80);
             GameController.instance.CloseMenu();
         }
 		if (name.Equals("Area") && GameController.instance.currentEnergy >= 250)
         {
             builded = true;
             turretPool[0].SetActive(true);
-			turretUp = turretPool[0].GetComponent<TurretUpgrade>();
-			GameController.instance.LoseEnergy(250);
+			turretUp = turretPool[0].GetComponent<Upgrade>();
+            curretTower = turretPool[0].GetComponent<Turret>();
+            GameController.instance.LoseEnergy(250);
             GameController.instance.CloseMenu();
         }
 		if (name.Equals("Slow") && GameController.instance.currentEnergy >= 200)
         {
             builded = true;
             turretPool[3].SetActive(true);
-			turretUp = turretPool[3].GetComponent<TurretUpgrade>();
-			GameController.instance.LoseEnergy(200);
+			turretUp = turretPool[3].GetComponent<Upgrade>();
+            curretTower = turretPool[3].GetComponent<Turret>();
+            GameController.instance.LoseEnergy(200);
             GameController.instance.CloseMenu();
         }
 		if (name.Equals("Heavy") && GameController.instance.currentEnergy >= 100)
         {
             builded = true;
             turretPool[2].SetActive(true);
-			turretUp = turretPool[2].GetComponent<TurretUpgrade>();
-			GameController.instance.LoseEnergy(100);
+			turretUp = turretPool[2].GetComponent<Upgrade>();
+            curretTower = turretPool[2].GetComponent<Turret>();
+            GameController.instance.LoseEnergy(100);
             GameController.instance.CloseMenu();
         }
     }
@@ -110,51 +115,53 @@ public class BuildTile : MonoBehaviour {
 		{
 			builded = true;
 			turretPool[1].SetActive(true);
-			turretUp = turretPool[1].GetComponent<TurretUpgrade>();
+			turretUp = turretPool[1].GetComponent<Upgrade>();
+            curretTower = turretPool[1].GetComponent<Turret>();
 
-		}
+        }
 		if (name.Equals("Area") )
 		{
 			builded = true;
 			turretPool[0].SetActive(true);
-			turretUp = turretPool[0].GetComponent<TurretUpgrade>();
+			turretUp = turretPool[0].GetComponent<Upgrade>();
+            curretTower = turretPool[0].GetComponent<Turret>();
 
-		}
+        }
 		if (name.Equals("Slow") )
 		{
 			builded = true;
 			turretPool[3].SetActive(true);
-			turretUp = turretPool[3].GetComponent<TurretUpgrade>();
+			turretUp = turretPool[3].GetComponent<Upgrade>();
+            curretTower = turretPool[3].GetComponent<Turret>();
 
-			;
-		}
+
+        }
 		if (name.Equals("Heavy") )
 		{
 			builded = true;
 			turretPool[2].SetActive(true);
-			turretUp = turretPool[2].GetComponent<TurretUpgrade>();
+			turretUp = turretPool[2].GetComponent<Upgrade>();
+            curretTower = turretPool[2].GetComponent<Turret>();
 
-		
-		}
+
+        }
 	}
 
 
 	public void UpGrade(){
-		if (!turretUp.upgrade1 && GameController.instance.currentEnergy >= turretUp.upgradeCost ) {
-			turretUp.PowerUp1Active();
-			GameController.instance.LoseEnergy(turretUp.upgradeCost);
+        Debug.Log("qui");
+        if (turretUp.Liv < 2 && GameController.instance.currentEnergy >= curretTower.CostUpgrade ) {
+            turretUp.LevelUp();
+			GameController.instance.LoseEnergy(curretTower.CostUpgrade);
 			GameController.instance.CloseMenu();
 
-		}else if(turretUp.upgrade1 && GameController.instance.currentEnergy >= turretUp.upgradeCost){
-			turretUp.PowerUp2Active();
-			GameController.instance.LoseEnergy(turretUp.upgradeCost);
-			GameController.instance.CloseMenu();
+		
 		}
 
 	}
 
 	public void Sell(){
-		GameController.instance.TakeEnergy (turretUp.SellValue);
+	//	GameController.instance.TakeEnergy (turretUp.SellValue);
 
 
 
