@@ -10,12 +10,14 @@ public class SpawnBarrier : MonoBehaviour {
 
 
 	void Awake () {
-		spawnPoint.SetActive (false);	
+		//spawnPoint.SetActive (false);	
+        
 	}
 
 	void Update(){
 		if (currentMinionPassed >= minionForNextSpawnPoint) {
-			spawnPoint.SetActive (true);
+            //spawnPoint.SetActive (true);
+            spawnPoint.GetComponent<Spawnpoint>().Open();
 			this.gameObject.SetActive (false);
 		}		
 	}
