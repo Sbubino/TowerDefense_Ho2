@@ -9,10 +9,12 @@ public class Turret : MonoBehaviour {
 	public LayerMask m_EnemyLayer;
 	public GameObject m_BulletPrefab;
     public float m_Range;
-	
 
-	//Variabili TorreInterne
-	float timer;
+    [HideInInspector]
+    public bool canShoot = true;
+
+    //Variabili TorreInterne
+    float timer;
     CircleCollider2D range;
 
 	//Variabili per SetTArget()
@@ -55,8 +57,11 @@ public class Turret : MonoBehaviour {
 		{
 			SetTarget();
 
-			if (timer >= m_FireRate)
-				Shoot();
+            if (timer >= m_FireRate)
+            {
+                if(canShoot)
+                    Shoot();
+            }
 		}		
 	}
 

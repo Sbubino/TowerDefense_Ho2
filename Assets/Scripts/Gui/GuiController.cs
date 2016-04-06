@@ -23,6 +23,8 @@ public class GuiController : MonoBehaviour {
 	public GameObject bossIcon;
 	public GameObject normalIcon;
 
+	public GameObject nextWave;
+
 	public GameObject pauseScreen;
 	public GameObject winScreen;
 	public GameObject loseScreen;
@@ -43,7 +45,9 @@ public class GuiController : MonoBehaviour {
 
 
 	void Awake(){
+
 		instance = this;
+
 		Time.timeScale = 0;
 	  
 		gameStarted = false;
@@ -55,24 +59,15 @@ public class GuiController : MonoBehaviour {
 		pauseScreen.SetActive (false);
 		winScreen.SetActive (false);
 		loseScreen.SetActive (false);
-
-
 	}
 
 	void Update () {
+
 		EnergyBar ();
-
-
 		FlashWave ();
+		TakeNextWave ();
+		EndLevel ();	
 
-		TakeNextWave ();	
-
-		if (win)
-			winScreen.SetActive (true);
-
-		if (lose)
-			loseScreen.SetActive (true);
-	
 	}
 
 	void TakeNextWave(){
@@ -102,12 +97,13 @@ public class GuiController : MonoBehaviour {
 		if (gameStarted) {
 			Time.timeScale = 0;		
 
-			play.SetActive (true);
-			pause.SetActive (false);
+			//play.SetActive (true);
+			//pause.SetActive (false);
 
+		
 			pauseScreen.SetActive (true);
-		}
 
+		}
 
 	}
 
@@ -122,6 +118,8 @@ public class GuiController : MonoBehaviour {
 			xx2.SetActive (false);
 
 			pauseScreen.SetActive (false);
+
+		
 		}
 	}
 
@@ -132,15 +130,21 @@ public class GuiController : MonoBehaviour {
 			x2.SetActive (false);
 			xx2.SetActive (true);
 
-			pause.SetActive (false);
-			play.SetActive (true);
+			//pause.SetActive (false);
+			//play.SetActive (true);
 		}
 	}
 
 
 	public void NextWavebutton(){
-		GameController.instance.waveTimer += 100; 
-		if (!gameStarted) {
+
+        float amount = (Mathf.RoundToInt(GameController.instance.nextWaveIn) - Mathf.RoundToInt(GameController.instance.waveTimer));
+
+        GameController.instance.waveTimer += 100;
+        GameController.instance.currentEnergy += amount;
+
+
+        if (!gameStarted) {
 			gameStarted = true;
 			Time.timeScale = 1;
 		}
@@ -165,6 +169,26 @@ public class GuiController : MonoBehaviour {
 			}
 		}
 	}
+
+	void EndLevel(){
+
+		
+		if (win) {
+			winScreen.SetActive (true);
+
+			Time.timeScale = 0;
+
+		}
+		if (lose) {
+			loseScreen.SetActive (true);
+
+
+			Time.timeScale = 0;
+		}
+
+	}
+
+
 
 
 	public void ToMainMenu(){

@@ -8,6 +8,7 @@ public class turret : MonoBehaviour {
     
     public LayerMask m_EnemtLayer;
 
+   
     GameObject[] bulletPool;
     int bulletPoolIndex;
     GameObject target;
@@ -16,7 +17,7 @@ public class turret : MonoBehaviour {
     int indexOfTarget;
    
     GameObject sprite;
-    GameObject spawnPoint;
+    GameObject spawnPoint;   
 
     float timer;
 
@@ -65,7 +66,7 @@ public class turret : MonoBehaviour {
 
             if (timer >= fireRate)
             {
-                Shoot();
+                     Shoot();
                
             }
 
@@ -117,8 +118,6 @@ public class turret : MonoBehaviour {
 
 		}
 	}
-    
-
 
 
    
