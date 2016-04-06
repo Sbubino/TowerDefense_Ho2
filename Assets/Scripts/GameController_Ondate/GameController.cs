@@ -64,9 +64,9 @@ public class GameController : MonoBehaviour {
 		EnergyControl ();
 		ClickSelect ();
 
-		Debug.Log (openMenu);
+	
 		if (openMenu && Input.GetMouseButtonDown (0)) {
-            Debug.Log(ClickSelect());
+           
             if (ClickSelect() == null || !ClickSelect().CompareTag("BottoniUI"))
             {
                 CloseMenu();
@@ -130,6 +130,14 @@ public class GameController : MonoBehaviour {
 
 	}
 
+    public void OpenMenu(GameObject target)
+    {
+        currentTile = target;
+        turretUpgrade.transform.position = new Vector3(target.transform.position.x, target.transform.position.y, -2);
+        turretUpgrade.PlayForward();
+        openMenu = true;
+    }
+
 
 	void WaveBuild(){
 		//riempio l'array wave con tutte le ondate in scena e imposto un valore wavetimer alto per far partire subuto la prima ondata al play
@@ -159,7 +167,7 @@ public class GameController : MonoBehaviour {
     }
 
 	public void Upgrade(){
-        Debug.Log("qui");
+        Debug.Log("UpgradePerJesoo");
         currentTile.SendMessage("UpGrade");
 
 	}

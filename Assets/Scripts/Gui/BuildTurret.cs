@@ -11,7 +11,7 @@ public class BuildTurret : MonoBehaviour {
 
     GameObject[] buildTile;
     GameObject[] buttonTurret;
-    GameObject turret;
+    GameObject currentTurret;
     RaycastHit2D hit;
 
     bool positioned = true;
@@ -42,17 +42,17 @@ public class BuildTurret : MonoBehaviour {
     void TurretPositioning() {
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        if (!positioned && turret != null)
+        if (!positioned && currentTurret != null)
         {
-            turret.transform.position = new Vector3(mousePos.x, mousePos.y, 0);
-            turret.GetComponent<Turret>().canShoot = false;
+            currentTurret.transform.position = new Vector3(mousePos.x, mousePos.y, 0);
+            currentTurret.GetComponent<Turret>().canShoot = false;
         }
         
 
         //se ho la torretta e clicco mouse destro la elimino
-        if (turret != null && !positioned && Input.GetMouseButtonDown(1))
+        if (currentTurret != null && !positioned && Input.GetMouseButtonDown(1))
         {
-            turret = null;
+            currentTurret = null;
 
             for (int i = 0; i < 4; i++)
             {
@@ -60,7 +60,7 @@ public class BuildTurret : MonoBehaviour {
             }
         }
 
-        if (turret != null && !positioned) { 
+        if (currentTurret != null && !positioned) { 
             for (int i = 0; i < buildTile.Length; i++)
             {
                 if (buildTile[i].GetComponent<BuildTile>().builded == false)
@@ -68,7 +68,7 @@ public class BuildTurret : MonoBehaviour {
             }
         }
 
-        else if (turret == null)
+        else if (currentTurret == null)
         {
             for (int i = 0; i < buildTile.Length; i++)
             {
@@ -79,18 +79,22 @@ public class BuildTurret : MonoBehaviour {
 
         hit = Physics2D.Raycast (mousePos, Vector3.forward, 100, m_BuildTileLayer);
 
-        if (hit != null && turret != null && !positioned )
+        if (hit != false && currentTurret != null && !positioned )
         {
             //la torretta segue il mouse
-            turret.transform.position = hit.transform.position;         
+            currentTurret.transform.position = hit.transform.gameObject.transform.position;         
 
             //posiziono la torretta nella build tile
             if (Input.GetMouseButtonDown(0) && hit.collider.gameObject.GetComponent<BuildTile>().builded == false)
             {
-                hit.collider.gameObject.GetComponent<BuildTile>().BuildTurret(turret.name);
-                GameController.instance.currentEnergy -= turret.GetComponent<Turret>().CostBuild;
-               
-                turret = null;
+                currentTurret.transform.position = hit.transform.position;
+                Turret temp =  currentTurret.gameObject.GetComponent<Turret>();
+                temp.SetBuildTile();
+                GameController.instance.currentEnergy -= currentTurret.GetComponent<Turret>().CostBuild;
+
+                currentTurret.GetComponent<Turret>().canShoot = true;
+
+                currentTurret = null;
                 positioned = true;
             }
         }
@@ -106,25 +110,25 @@ public class BuildTurret : MonoBehaviour {
         if (names == "Fast" && GameController.instance.currentEnergy >= buttonTurret[0].GetComponent<Turret>().CostBuild)
         {
             buttonTurret[0].SetActive(true);
-            turret = buttonTurret[0];
+            currentTurret = buttonTurret[0];
         }
         else if (names == "Area" && GameController.instance.currentEnergy >= buttonTurret[1].GetComponent<Turret>().CostBuild)
         {
             buttonTurret[1].SetActive(true);
-            turret = buttonTurret[1];
+            currentTurret = buttonTurret[1];
         }
        
 
         else if (names == "Heavy" && GameController.instance.currentEnergy >= buttonTurret[2].GetComponent<Turret>().CostBuild)
         {
             buttonTurret[2].SetActive(true);
-            turret = buttonTurret[2];
+            currentTurret = buttonTurret[2];
         }
 
         else if (names == "Slow" && GameController.instance.currentEnergy >= buttonTurret[3].GetComponent<Turret>().CostBuild)
         {
             buttonTurret[3].SetActive(true);
-            turret = buttonTurret[3];
+            currentTurret = buttonTurret[3];
         }       
     }
 
@@ -135,12 +139,12 @@ public class BuildTurret : MonoBehaviour {
 
         for (int i = 0; i < buttons.Length; i++)
         {
-             if (GameController.instance.currentEnergy < buttonTurret[i].GetComponent<Turret>().CostBuild)
-                 buttons[i].transform.GetChild(1).transform.GetComponent<UISprite>().color = Color.white;
+            if (GameController.instance.currentEnergy < buttonTurret[i].GetComponent<Turret>().CostBuild)
+                buttons[i].GetComponentInChildren<UISprite>().color = Color.red;
 
 
-             else
-                buttons[i].transform.GetChild(1).transform.GetComponent<UISprite>().color = Color.green;
+            else
+                buttons[i].GetComponentInChildren<UISprite>().color = Color.white;
 
 
             buttons[i].GetComponentInChildren<UILabel>().text = buttonTurret[i].GetComponent<Turret>().CostBuild.ToString();

@@ -7,11 +7,15 @@ public class Turret : MonoBehaviour {
 	public float m_Damage;
 	public float m_FireRate;
 	public LayerMask m_EnemyLayer;
-	public GameObject m_BulletPrefab;
+    public LayerMask m_BuildTileMask;
+    public GameObject m_BulletPrefab;
     public float m_Range;
+
+    RaycastHit2D hit;
 
     [HideInInspector]
     public bool canShoot = true;
+   
 
     //Variabili TorreInterne
     float timer;
@@ -34,7 +38,6 @@ public class Turret : MonoBehaviour {
         range = GetComponent<CircleCollider2D>();
         range.radius = m_Range;
 		bulletPool = new GameObject[10];
-
 		target = null;
 
 		for(int i = 0; i< bulletPool.Length; i++)
@@ -48,10 +51,12 @@ public class Turret : MonoBehaviour {
 
 	void Update(){
 		timer += Time.deltaTime;
-	}
+       // canShoot = true;
+
+    }
 
 
-	void OnTriggerStay2D(Collider2D trig)
+    void OnTriggerStay2D(Collider2D trig)
 	{
 		if (trig.gameObject.tag == "Enemy")
 		{
@@ -146,5 +151,14 @@ public class Turret : MonoBehaviour {
     public void setRange(float ran)
     {
         range.radius = ran;
+    }
+
+    public void SetBuildTile()
+    {
+        hit = Physics2D.Raycast(transform.position, Vector3.back, 100, m_BuildTileMask);
+        if (hit)
+        {
+            hit.transform.gameObject.SendMessage("SetCurrentTurret", gameObject);
+        }
     }
 }
