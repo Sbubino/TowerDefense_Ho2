@@ -24,7 +24,7 @@ public class GameController : MonoBehaviour {
 	public float nextEnergyValueDecrease;
 	public float moltiplicatoreEnergy;
 	public int maxEnergy;
-	[HideInInspector]
+	//[HideInInspector]
 	public float currentEnergy;
 	[HideInInspector]
 	public float waveTimer;
@@ -51,7 +51,7 @@ public class GameController : MonoBehaviour {
 		//imposto i valori dell'energy iniziale
 		moltiplicatoreEnergy = 1f;
 		//currentEnergy = maxEnergy;
-		currentEnergy = 300;
+		//currentEnergy = 300;
 		waveTimer = nextWaveIn - 2;
 
 		//WaveBuild ();	

@@ -22,6 +22,7 @@ public class Enemy : MonoBehaviour {
     Vector3 spawn;
     GameObject lastTurret;
     float timer;
+    bool isSlow;
 
 
 
@@ -132,13 +133,25 @@ public class Enemy : MonoBehaviour {
 
     void Slow(float[] slow){
 		Debug.Log ("kesooo");
-		StartCoroutine ("GetSlow", slow);
+        if (!isSlow)
+        {
+            Speed /= slow[0];
+            isSlow = true;
 
-	}
+            StartCoroutine("GetSlow", slow);
+        }
+        else
+        {
+            StopAllCoroutines();
+            StartCoroutine("GetSlow", slow);
+
+        }
+
+    }
 
 	IEnumerator GetSlow(float[] slow)
     {
-		Speed /= slow [0];
+		//Speed /= slow [0];
 		yield return new WaitForSeconds (slow [1]);
 		Speed *= slow [0];
     }
