@@ -139,12 +139,20 @@ public class BuildTurret : MonoBehaviour {
 
         for (int i = 0; i < buttons.Length; i++)
         {
+
             if (GameController.instance.currentEnergy < buttonTurret[i].GetComponent<Turret>().CostBuild)
-                buttons[i].GetComponentInChildren<UISprite>().color = Color.red;
+            {
+                buttons[i].transform.GetChild(1).transform.GetComponent<UISprite>().color = Color.white;
+                buttons[i].GetComponentInChildren<UISprite>().color = Color.grey;
+
+            }
 
 
             else
+            {
+                buttons[i].transform.GetChild(1).transform.GetComponent<UISprite>().color = Color.green;
                 buttons[i].GetComponentInChildren<UISprite>().color = Color.white;
+            }
 
 
             buttons[i].GetComponentInChildren<UILabel>().text = buttonTurret[i].GetComponent<Turret>().CostBuild.ToString();
