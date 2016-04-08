@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Tile : MonoBehaviour {
+public class TileVecchia : MonoBehaviour {
 
     public LayerMask walkableTileMask;
     public LayerMask m_enemyMask;
