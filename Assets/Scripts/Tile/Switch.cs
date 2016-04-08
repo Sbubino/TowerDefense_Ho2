@@ -12,6 +12,7 @@ public class Switch : Tile {
     int distanceToCore2 = -1;
     GameObject path1;
     GameObject path2;
+     GameObject[] sprites;
 
     GameObject sprite;
     float timer;
@@ -24,6 +25,15 @@ public class Switch : Tile {
         base.Awake();
         sprite = transform.GetChild(0).gameObject;
         timerSwitch = 0.6f;
+
+        sprites = new GameObject[4];
+
+        for (int i = 0; i < sprites.Length; i++)
+        {
+            sprites[i] = transform.GetChild(0).GetChild(i).gameObject;
+        }
+
+
     }
 
     void Update()
@@ -126,31 +136,96 @@ public class Switch : Tile {
     {
 
 
+        //if (m_Path1 && path1 != null)
+        //{
+
+        //    //Vector2 vectorToTarget = path1.transform.position - sprite.transform.position;
+        //    //float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
+        //    //if(m_Rot1neg)
+        //    //    sprite.transform.rotation = Quaternion.AngleAxis(-angle, Vector3.forward);
+        //    //else
+        //    //    sprite.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+        //}
+        //else if (path2 != null)
+        //{
+
+        //    Vector2 vectorToTarget = path2.transform.position - sprite.transform.position;
+        //    float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
+        //    Debug.Log(angle);
+        //    if (m_Rot2neg)
+        //        sprite.transform.rotation = Quaternion.AngleAxis(-angle, Vector3.forward);
+        //    else
+        //        sprite.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+        //}
+
         if (m_Path1 && path1 != null)
         {
 
-            Vector2 vectorToTarget = path1.transform.position - sprite.transform.position;
-            float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
-            if(m_Rot1neg)
-                sprite.transform.rotation = Quaternion.AngleAxis(-angle, Vector3.forward);
-            else
-                sprite.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            if (path2.transform.position.y > transform.position.y)
+            {
+                ActivateSprites(0);
+                Debug.Log("a");
+
+            }
+            else if (path2.transform.position.y < transform.position.y)
+            {
+                ActivateSprites(2);
+                Debug.Log("1b");
+
+            }
+           else  if (path2.transform.position.x > transform.position.x)
+            {
+                ActivateSprites(1);
+                Debug.Log("1c");
+
+            }
+           else if (path2.transform.position.x < transform.position.x)
+            {
+                ActivateSprites(3);
+                Debug.Log("1d");
+
+            }
+
 
         }
-        else if (path2 != null)
-        {
 
-            Vector2 vectorToTarget = path2.transform.position - sprite.transform.position;
-            float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
-            Debug.Log(angle);
-            if (m_Rot2neg)
-                sprite.transform.rotation = Quaternion.AngleAxis(-angle, Vector3.forward);
-            else
-                sprite.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+       else if (path2 != null)
+        {
+            if (path1.transform.position.y > transform.position.y)
+            {
+                ActivateSprites(0);
+            }
+            else if (path1.transform.position.y < transform.position.y-0.1)
+            {
+                ActivateSprites(2);
+            }
+            else if (path1.transform.position.x > transform.position.x)
+            {
+                ActivateSprites(1);
+            }
+            else if (path1.transform.position.x < transform.position.x)
+            {
+                ActivateSprites(3);
+                Debug.Log("1d");
+
+            }
+
+
 
         }
     }
 
 
-    
+    void ActivateSprites(int index)
+    {
+        for (int i = 0; i < sprites.Length; i++)
+        {
+            if (i == index)
+                sprites[i].SetActive(true);
+            else
+                sprites[i].SetActive(false);
+        }
+    }
 }

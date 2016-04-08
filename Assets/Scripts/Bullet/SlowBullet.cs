@@ -12,9 +12,10 @@ public class SlowBullet : Bullet {
 	{
 		if (col.gameObject.CompareTag ("Enemy")) {
 
-				col.gameObject.SendMessage ("TakeDamage", damage);
+            col.gameObject.SendMessage("Slow", slow);
+
+            col.gameObject.SendMessage ("TakeDamage", damage);
 	
-				col.gameObject.SendMessage ("Slow", slow);
 
 				gameObject.SetActive (false);
 		}
