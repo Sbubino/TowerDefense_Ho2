@@ -88,11 +88,13 @@ public class BuildTurret : MonoBehaviour {
             if (Input.GetMouseButtonDown(0) && hit.collider.gameObject.GetComponent<BuildTile>().builded == false)
             {
                 currentTurret.transform.position = hit.transform.position;
-                Turret temp =  currentTurret.gameObject.GetComponent<Turret>();
+                GameObject tmp = Instantiate(currentTurret, currentTurret.transform.position, currentTurret.transform.rotation) as GameObject;
+                Turret temp = tmp.GetComponent<Turret>() ;
+                temp.canShoot = true;
                 temp.SetBuildTile();
-                GameController.instance.currentEnergy -= currentTurret.GetComponent<Turret>().CostBuild;
+                GameController.instance.currentEnergy -= temp.CostBuild;
 
-                currentTurret.GetComponent<Turret>().canShoot = true;
+               // currentTurret.GetComponent<Turret>().canShoot = true;
 
                 currentTurret = null;
                 positioned = true;
