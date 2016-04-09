@@ -5,8 +5,16 @@ public class Slow : Turret {
 	public float m_SlowAmount;
 	public float m_SlowTime;
 	SlowBullet[] pool;
-	
-	void Start()
+
+    protected override void Awake()
+    {
+        base.Awake();
+        typeName = "Freezing icecream";
+        extraInfo = "\n\nSlows down enemies when hit";
+
+    }
+
+    void Start()
 	{
 		pool = new SlowBullet[bulletPool.Length];
 		

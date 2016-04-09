@@ -29,13 +29,18 @@ public class GameController : MonoBehaviour {
 	[HideInInspector]
 	public float waveTimer;
 
-	GameObject SpawnHolder;
+    DialogoController dialogo;
+
+
+    GameObject SpawnHolder;
 	GameObject[] spawnPoint;
 	GameObject waveHolder;
 	GameObject[] wave;
 	int nextWaveControl = 0;
 	int indexWave = 0;
 	int localWaveIndex = 0;
+
+    bool multiplierSelected = false;
 
 
 
@@ -46,13 +51,17 @@ public class GameController : MonoBehaviour {
 	private SpriteRenderer fatMan;
 	public Sprite[] CiccioneSprite;
 
+    public float energyMultCost = 0.5f;
+
 	void Awake() {
 		instance = this;	
 		//imposto i valori dell'energy iniziale
 		moltiplicatoreEnergy = 1f;
-		//currentEnergy = maxEnergy;
-		//currentEnergy = 300;
-		waveTimer = nextWaveIn - 2;
+        dialogo = FindObjectOfType<DialogoController>();
+
+        //currentEnergy = maxEnergy;
+        //currentEnergy = 300;
+        waveTimer = nextWaveIn - 2;
 
 		//WaveBuild ();	
 		SpawnpointBuild ();
@@ -62,8 +71,10 @@ public class GameController : MonoBehaviour {
 	void Update () {
 		//WaveControl ();
 		EnergyControl ();
-		ClickSelect ();
+            ClickSelect ();
+        if (Input.GetMouseButtonDown(0))
 
+            ClickInfo();
 	
 		if (openMenu && Input.GetMouseButtonDown (0)) {
            
@@ -86,6 +97,48 @@ public class GameController : MonoBehaviour {
 	public void TakeEnergy (float incremento){
 		currentEnergy = currentEnergy + (Mathf.Round(incremento) * moltiplicatoreEnergy);
 	}
+
+    public void IncreaseMultiplier()
+    {
+        if (currentEnergy >= energyMultCost * maxEnergy)
+        {
+            if (!multiplierSelected)
+                StartCoroutine(ClickMultiplier(false));
+            else
+            {
+                moltiplicatoreEnergy *= 1.1f;
+                maxEnergy = (int)Mathf.Round(maxEnergy * 1.2f);
+                currentEnergy = currentEnergy - energyMultCost * maxEnergy;
+                dialogo.Reset();
+                StopAllCoroutines();
+                Debug.Log("ene");
+            }
+
+        }
+
+        else
+            dialogo.GeneralInfo("You don't have enough energy to buy a multiplier" + "\n\n Cost: " + (energyMultCost * maxEnergy) + " energy");
+
+
+    }
+
+    public IEnumerator ClickMultiplier(bool selected)
+    {
+        if (!selected)
+        {
+            yield return new WaitForEndOfFrame();
+            multiplierSelected = true;
+            dialogo.GeneralInfo("Click now to buy an energy multipier. \n\n Energy will grow faster and maximum energy will be increased" + "\n\n Cost: " + (energyMultCost * maxEnergy) + " energy");
+            StartCoroutine(ClickMultiplier(true));
+        }
+
+            else
+        { yield return new WaitForSeconds(5 * Time.timeScale);
+            multiplierSelected = false;
+            StopAllCoroutines();
+        }
+
+    }
 
    public void CloseMenu()
     {
@@ -176,6 +229,11 @@ public class GameController : MonoBehaviour {
 		currentTile.SendMessage("Sell");
 	}
 
+    public void EnergyBarInfo()
+    {
+        dialogo.GeneralInfo("This is my energy, use it wisely! \n Please, keep me fat, don't let it go to 0! \n\n If you tap on the burger, you can buy an energy multiplier");
+    }
+
 
     public void WaveControl(int waveLenght){
 		//gestione dei due metodi precedenti
@@ -263,5 +321,30 @@ public class GameController : MonoBehaviour {
 			fatMan.sprite = CiccioneSprite[2];
 		}
 	}
+
+
+
+    void ClickInfo()
+    {
+        //Converting Mouse Pos to 2D (vector2) World Pos
+        Vector2 rayPos = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
+        RaycastHit2D hit = Physics2D.Raycast(rayPos, Vector2.zero, 0f);
+        if (hit)
+        {
+            if (hit.transform.tag == "Core")
+            {
+                Debug.Log(hit.transform.name);
+                dialogo.GeneralInfo("I'm so hungry, but i hate veggies. \nHelp me!");
+                //return hit.transform.gameObject;
+            }
+
+            if (hit.transform.tag == "Enemy")
+            {
+                dialogo.GeneralInfo(hit.transform.gameObject.GetComponent<Enemy>().SendInfo());
+            }
+
+        }
+       // else return null;
+    }
 
 }

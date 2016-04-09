@@ -43,12 +43,15 @@ public class GuiController : MonoBehaviour {
 	bool gameStarted;
 	float timer = 0;
 
+    DialogoController dialogo;
 
-	void Awake(){
+
+    void Awake(){
 
 		instance = this;
+        dialogo = FindObjectOfType<DialogoController>();
 
-		Time.timeScale = 0;
+        Time.timeScale = 0;
 	  
 		gameStarted = false;
 		bossIcon.SetActive (false);
@@ -114,10 +117,15 @@ public class GuiController : MonoBehaviour {
 			play.SetActive (false);
 			pause.SetActive (true);
 
-			x2.SetActive (true);
-			xx2.SetActive (false);
+            if (xx2.activeSelf)
+            {
+                x2.SetActive(true);
+                xx2.SetActive(false);
+                dialogo.SendMessage("GeneralInfo", "Ok then.\n Let's go back to regular speed");
+            }
 
-			pauseScreen.SetActive (false);
+
+            pauseScreen.SetActive (false);
 
 		
 		}
@@ -129,7 +137,7 @@ public class GuiController : MonoBehaviour {
 			Time.timeScale = 2;
 			x2.SetActive (false);
 			xx2.SetActive (true);
-
+            dialogo.SendMessage("GeneralInfo", "The game was too slow for you?\n Speed is  now doubled!");
 			//pause.SetActive (false);
 			//play.SetActive (true);
 		}

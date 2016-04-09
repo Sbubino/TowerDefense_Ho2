@@ -6,6 +6,7 @@ public class BuildTurret : MonoBehaviour {
 
     public GameObject[] allTurret;
     public GameObject[] buttons = new GameObject[4];
+    DialogoController dialogo;
  
 	public LayerMask m_BuildTileLayer;
 
@@ -20,7 +21,7 @@ public class BuildTurret : MonoBehaviour {
     void Awake()
     {
         buttonTurret = new GameObject[allTurret.Length];
-
+        dialogo = FindObjectOfType<DialogoController>();
         for (int i = 0; i < allTurret.Length; i++)
         {
            buttonTurret[i] = Instantiate(allTurret[i], transform.position, allTurret[i].transform.rotation) as GameObject;
@@ -131,7 +132,9 @@ public class BuildTurret : MonoBehaviour {
         {
             buttonTurret[3].SetActive(true);
             currentTurret = buttonTurret[3];
-        }       
+        }
+        //dialogo.SendMessage("TurretInfo", currentTurret.GetComponent<Turret>());
+
     }
 
 

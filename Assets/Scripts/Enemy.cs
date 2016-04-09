@@ -63,6 +63,19 @@ public class Enemy : MonoBehaviour {
 
     }
 
+    public string SendInfo()
+    {
+        string info = this.name;
+        //for(int i=0; i < 10; i++)
+        //{
+        //    info.Trim(i.ToString()[0]);
+        //}
+        //info.Trim('_');
+       string tmp = info.Split('_')[0];
+
+        return tmp+ "\n\n Max energy: " + m_MaxLife + "\n Speed: " + Speed +" \n Banishment cost: " + banishmentCost + " energy\n Reward: " +AddEnergy + " energy";
+    }
+
     //Setta i parametri possible time, next tile e current tile
     void SetCurrentTiles()
     {

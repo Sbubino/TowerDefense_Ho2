@@ -7,7 +7,14 @@ public class Area : Turret {
 
 	AreaBullet[] pool;
 
-	void Start()
+    protected override void Awake()
+    {
+        base.Awake();
+        typeName = "Explosive Chili";
+        extraInfo = "\n\nBullets explode and hit more enemies";
+    }
+
+    void Start()
 	{
 		pool = new AreaBullet[bulletPool.Length];
 		
@@ -16,6 +23,7 @@ public class Area : Turret {
 			pool[i] = bulletPool[i].GetComponent<AreaBullet>();
 			pool[i].SetValue(m_AreaExplosion, m_EnemyLayer);
 		}
+
 	}	
 
 	void SetBulletValue(){

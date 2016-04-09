@@ -4,8 +4,9 @@ using UnityEngine.UI;
 
 public class BuildTile : MonoBehaviour {
     public LayerMask m_TurretMask;
+    DialogoController dialogo;
 
-	Upgrade turretUp;
+    Upgrade turretUp;
     Turret curretTower;
     
     
@@ -13,7 +14,11 @@ public class BuildTile : MonoBehaviour {
 
     float timer;
         	
+    void Awake()
+    {
+        dialogo = FindObjectOfType<DialogoController>();
 
+    }
 
     void Update()
     {
@@ -29,6 +34,12 @@ public class BuildTile : MonoBehaviour {
         if (builded)
         {
             GameController.instance.OpenMenu(gameObject);
+            curretTower.UpInfo(true);
+        }
+        else
+        {
+            dialogo.SendMessage("GeneralInfo", "Empty slot, you can drop some food here");
+
         }
 
     }
