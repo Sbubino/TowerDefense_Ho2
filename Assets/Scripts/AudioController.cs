@@ -43,26 +43,31 @@ public class AudioController : MonoBehaviour {
 
 	public void ChillyEfx()
 	{
+		Efx.volume = 0.2f;
 		Efx.PlayOneShot(efx[0]);
 	}
-
+	
 	public void PanCakeEfx()
 	{
+		Efx.volume = 0.2f;
 		Efx.PlayOneShot(efx[1]);
 	}
-
+	
 	public void IceCreamEfx()
 	{
+		Efx.volume = 0.2f;
 		Efx.PlayOneShot(efx[2]);
 	}
-
+	
 	public void MeatballsEfx()
 	{
+		Efx.volume = 0.2f;
 		Efx.PlayOneShot(efx[3]);
 	}
-
+	
 	public void MenuTrack()
 	{
+		SoundTrack.volume = 0.05f;
 		SoundTrack.loop = true;
 		SoundTrack.clip = soundTrack[0];
 		SoundTrack.Play();
@@ -117,6 +122,20 @@ public class AudioController : MonoBehaviour {
 		SoundTrack.clip = soundTrack[0];
 		SoundTrack.Play ();
 		
+	}
+
+	public void CiccionePain()
+	{
+		Debug.Log("Jesoo is for anal");
+		Efx.volume = 1;
+		int random = Random.Range (4,6);
+		Efx.PlayOneShot(efx[random]);
+	}
+	
+	public void CiccioneDead()
+	{
+		Efx.volume = 1;
+		Efx.PlayOneShot(efx[6]);
 	}
 
 

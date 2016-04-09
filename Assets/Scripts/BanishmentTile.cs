@@ -30,6 +30,7 @@ public class BanishmentTile : MonoBehaviour {
         {
             hit.collider.GetComponent<Enemy>().Banishment();
 			Debug.Log ("super Jesoo è immenso");
+			AudioController.instance.CiccionePain();
         }
     }
 }

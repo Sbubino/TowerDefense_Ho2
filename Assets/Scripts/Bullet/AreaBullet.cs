@@ -37,6 +37,7 @@ public class AreaBullet : Bullet {
 		if (col.gameObject.CompareTag ("Enemy")) 
 		{				
 			Explode ();		
+			AudioController.instance.ChillyEfx();
 		}
 	}
 

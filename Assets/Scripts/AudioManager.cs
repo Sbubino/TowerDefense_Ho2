@@ -2,26 +2,27 @@
 using System.Collections;
 
 public class AudioManager : MonoBehaviour {
-
-	public AudioSource efxSource;
-	public AudioSource musicSource;
-	public static AudioManager instance = null;
-
-	public float lowPitchRange = .95f;
-	public float highPitchRange = 1.05f;
-
+	//	public AudioSource efxSource;
+	//	public AudioSource musicSource;
+	public AudioManager instance = null;
+	
+	//	public float lowPitchRange = .95f;
+	//	public float highPitchRange = 1.05f;
+	
 	// Use this for initialization
 	void Awake () 
 	{
-		if (instance == null)
+		if (instance == null){
 			instance = this;
-		else if (instance != this)
+		}
+		else if (instance != this){
 			Destroy (gameObject);
+		}
 		DontDestroyOnLoad (gameObject);
-	
+		
 	}
-
-	public void PlaySingle (AudioClip clip)
+	
+	/*	public void PlaySingle (AudioClip clip)
 	{
 		efxSource.clip = clip;
 		efxSource.Play ();
@@ -36,4 +37,5 @@ public class AudioManager : MonoBehaviour {
 		efxSource.clip = clips [randomIndex];
 		efxSource.Play ();
 	}
+	*/
 }

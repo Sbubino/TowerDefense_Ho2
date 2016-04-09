@@ -9,7 +9,8 @@ public class FastBullet : Bullet {
 		if (col.gameObject.CompareTag ("Enemy")) 
 		{
 			col.gameObject.SendMessage ("TakeDamage", damage);
-			gameObject.SetActive (false);			
+			gameObject.SetActive (false);
+			AudioController.instance.PanCakeEfx();
 		}
 	}
 }

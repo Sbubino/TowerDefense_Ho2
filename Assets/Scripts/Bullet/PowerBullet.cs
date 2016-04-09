@@ -9,6 +9,7 @@ public class PowerBullet : Bullet {
 		{
 			col.gameObject.SendMessage ("TakeDamage", damage);
 			gameObject.SetActive (false);			
+			AudioController.instance.MeatballsEfx();
 		}
 	}
 }

@@ -18,6 +18,7 @@ public class SlowBullet : Bullet {
 	
 
 				gameObject.SetActive (false);
+			AudioController.instance.IceCreamEfx();
 		}
 	}
 
