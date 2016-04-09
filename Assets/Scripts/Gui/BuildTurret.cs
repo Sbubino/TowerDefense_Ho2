@@ -95,8 +95,8 @@ public class BuildTurret : MonoBehaviour {
                 temp.SetBuildTile();
                 GameController.instance.currentEnergy -= temp.CostBuild;
 
-               // currentTurret.GetComponent<Turret>().canShoot = true;
-
+                // currentTurret.GetComponent<Turret>().canShoot = true;
+                currentTurret.SetActive(false);
                 currentTurret = null;
                 positioned = true;
             }
@@ -114,11 +114,13 @@ public class BuildTurret : MonoBehaviour {
         {
             buttonTurret[0].SetActive(true);
             currentTurret = buttonTurret[0];
+                    dialogo.SendMessage("TurretInfo", currentTurret.GetComponent<Turret>());
         }
         else if (names == "Area" && GameController.instance.currentEnergy >= buttonTurret[1].GetComponent<Turret>().CostBuild)
         {
             buttonTurret[1].SetActive(true);
             currentTurret = buttonTurret[1];
+            dialogo.SendMessage("TurretInfo", currentTurret.GetComponent<Turret>());
         }
        
 
@@ -126,14 +128,16 @@ public class BuildTurret : MonoBehaviour {
         {
             buttonTurret[2].SetActive(true);
             currentTurret = buttonTurret[2];
+            dialogo.SendMessage("TurretInfo", currentTurret.GetComponent<Turret>());
         }
 
         else if (names == "Slow" && GameController.instance.currentEnergy >= buttonTurret[3].GetComponent<Turret>().CostBuild)
         {
             buttonTurret[3].SetActive(true);
             currentTurret = buttonTurret[3];
+            dialogo.SendMessage("TurretInfo", currentTurret.GetComponent<Turret>());
         }
-        //dialogo.SendMessage("TurretInfo", currentTurret.GetComponent<Turret>());
+
 
     }
 

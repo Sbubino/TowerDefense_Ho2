@@ -97,39 +97,44 @@ public class Switch : Tile {
 
     public void SwitchChange()
     {
-
-        if (timerSwitch >= 0.5f)
+        if (GameController.instance.currentEnergy > switchEnergyCost)
         {
-            GameController.instance.LoseEnergy(switchEnergyCost);
-            m_Path1 = !m_Path1;
-
-            if (m_Path1)
+            if (timerSwitch >= 0.5f)
             {
-                distanceToCore = distanceToCore1;
-                nextTile = path1;
-            }
-            else {
-                distanceToCore = distanceToCore2;
-                nextTile = path2;
-            }
+                GameController.instance.LoseEnergy(switchEnergyCost);
+                m_Path1 = !m_Path1;
 
-
-
-            for (int i = 0; i < positionNextTile.Length; i++)
-            {
-                if (positionNextTile[i] != null && positionNextTile[i].transform.position != path1.transform.position && positionNextTile[i].transform.position != path2.transform.position)
+                if (m_Path1)
                 {
-                    checkDistance = true;
-
-                    Debug.Log("tile problema Switch " + positionNextTile[i]);
-                    positionNextTile[i].SendMessage("SetDistanceCore", distanceToCore);
+                    distanceToCore = distanceToCore1;
+                    nextTile = path1;
+                }
+                else
+                {
+                    distanceToCore = distanceToCore2;
+                    nextTile = path2;
                 }
 
-            }
 
-            RotateSprite();
-            timerSwitch = 0;
+
+                for (int i = 0; i < positionNextTile.Length; i++)
+                {
+                    if (positionNextTile[i] != null && positionNextTile[i].transform.position != path1.transform.position && positionNextTile[i].transform.position != path2.transform.position)
+                    {
+                        checkDistance = true;
+
+                        Debug.Log("tile problema Switch " + positionNextTile[i]);
+                        positionNextTile[i].SendMessage("SetDistanceCore", distanceToCore);
+                    }
+
+                }
+
+                RotateSprite();
+                timerSwitch = 0;
+            }
         }
+
+        else GameController.instance.dialogo.LockSwitch("You need more energy to activate the switch\n\n\nCost: 50");
     }
 
     public void RotateSprite()
@@ -160,7 +165,7 @@ public class Switch : Tile {
 
         //}
 
-        if (m_Path1 && path1 != null)
+        if (m_Path1 && path1 != null &&path2!=null)
         {
 
             if (path2.transform.position.y > transform.position.y)

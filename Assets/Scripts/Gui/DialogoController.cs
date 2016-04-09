@@ -5,7 +5,8 @@ public  class DialogoController : MonoBehaviour {
 
     GameObject selectedObject;
     string baseText;
-
+    bool onSwitch;
+    bool offSwitch;
    public UILabel dialog;
 
 	// Use this for initialization
@@ -19,17 +20,54 @@ public  class DialogoController : MonoBehaviour {
 	}
 
 
+    public void SwitchInfo(string info, bool on)
+    {
+        if (!offSwitch)
+        {
+           
+            if (on)
+            {
+                dialog.text = info;
+                onSwitch = true;
+                Debug.Log("on");
+            }
+            else if (onSwitch)
+            {
+                Reset();
+                onSwitch = false;
+            }
+        }
+
+    }
+
+    public void LockSwitch(string info)
+    {
+        StopAllCoroutines();
+        offSwitch = true;
+        dialog.text = info;
+        StartCoroutine(SwitchUnlock());
+    }
+
+    IEnumerator SwitchUnlock()
+    {
+        yield return new WaitForSeconds(2*Time.timeScale);
+        offSwitch = false;
+    }
+
     public void TurretInfo(Turret t)
     {
+        //  StopAllCoroutines();
         StopAllCoroutines();
 
         dialog.text = t.TurretDialogo();
-        StartCoroutine(Reset(5));
+//        StartCoroutine(Reset(5));
 
     }
 
     public void TurretUpInfo(string info)
     {
+        StopAllCoroutines();
+
         dialog.text = info;
 
     }

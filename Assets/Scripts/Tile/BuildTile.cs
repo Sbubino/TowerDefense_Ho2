@@ -7,7 +7,7 @@ public class BuildTile : MonoBehaviour {
     DialogoController dialogo;
 
     Upgrade turretUp;
-    Turret curretTower;
+    public Turret curretTower;
     
     
     public bool builded;
@@ -76,8 +76,9 @@ public class BuildTile : MonoBehaviour {
     
 
 	public void Sell(){
-	//	GameController.instance.TakeEnergy (turretUp.SellValue);
-
+	GameController.instance.TakeEnergy (curretTower.value);
+        curretTower.gameObject.SetActive(false);
+        builded = false;
 	}
 
 

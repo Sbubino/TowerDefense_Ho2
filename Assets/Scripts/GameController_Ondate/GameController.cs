@@ -10,6 +10,9 @@ public class GameController : MonoBehaviour {
 	[HideInInspector]
 	public int maxWaveNumber;
 
+    BuildTile currentBuild;
+    public GameObject shineSprite;
+
 	public TweenScale turretMenu;
 	public TweenScale turretUpgrade;
 	[HideInInspector]
@@ -29,7 +32,7 @@ public class GameController : MonoBehaviour {
 	[HideInInspector]
 	public float waveTimer;
 
-    DialogoController dialogo;
+    public DialogoController dialogo;
 
 
     GameObject SpawnHolder;
@@ -69,25 +72,34 @@ public class GameController : MonoBehaviour {
 	
 
 	void Update () {
-		//WaveControl ();
-		EnergyControl ();
-            ClickSelect ();
+        //WaveControl ();
+        if (GuiController.instance.gameStarted)
+        {
+            EnergyControl();
+          
+        }
+
         if (Input.GetMouseButtonDown(0))
 
             ClickInfo();
-	
-		if (openMenu && Input.GetMouseButtonDown (0)) {
-           
+
+        ClickSelect();
+        RadiusCheck();
+        HoverCheck();
+
+
+        if (openMenu && Input.GetMouseButtonDown(0))
+        {
+
             if (ClickSelect() == null || !ClickSelect().CompareTag("BottoniUI"))
             {
                 CloseMenu();
             }
-		}
+        }
 
 
 
-
-	}
+    }
 
 
 	//gestione dell'energy
@@ -171,7 +183,18 @@ public class GameController : MonoBehaviour {
 		if (currentEnergy < 0) {
 			GuiController.instance.lose = true;
 		}
-	}	  
+
+        if(currentEnergy >= maxEnergy * energyMultCost)
+        {
+            shineSprite.SetActive(true);
+            shineSprite.transform.Rotate(0, 0, 10 * Time.deltaTime);
+        }
+
+       else
+        {
+            shineSprite.SetActive(false);
+        }
+    }	  
 
 	void NextEnergyTime(){
 		nextEnergyDecreaseTimer += Time.deltaTime;
@@ -295,6 +318,10 @@ public class GameController : MonoBehaviour {
 
         if (hit.transform != null)
         {
+
+
+        
+
             return hit.transform.gameObject;
 
 
@@ -326,15 +353,26 @@ public class GameController : MonoBehaviour {
 
     void ClickInfo()
     {
-        //Converting Mouse Pos to 2D (vector2) World Pos
         Vector2 rayPos = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
         RaycastHit2D hit = Physics2D.Raycast(rayPos, Vector2.zero, 0f);
+
         if (hit)
         {
+
+
             if (hit.transform.tag == "Core")
             {
                 Debug.Log(hit.transform.name);
                 dialogo.GeneralInfo("I'm so hungry, but i hate veggies. \nHelp me!");
+                //return hit.transform.gameObject;
+            }
+
+            if (hit.transform.name.Split(' ')[0] == "Spawnpoint")
+            {
+                Debug.Log(hit.transform.name);
+                if(hit.transform.gameObject.GetComponent<Spawnpoint>().open)
+                dialogo.GeneralInfo("This is where the veggies live. \nWe must stop them!");
+                else dialogo.GeneralInfo("This is where the veggies live. \nAs long as the fridge is closed, we are safe.\n\nDon't let the veggies touch it, or they will open it!");
                 //return hit.transform.gameObject;
             }
 
@@ -343,8 +381,75 @@ public class GameController : MonoBehaviour {
                 dialogo.GeneralInfo(hit.transform.gameObject.GetComponent<Enemy>().SendInfo());
             }
 
+
+
         }
-       // else return null;
+        // else return null;
     }
 
-}
+    void RadiusCheck()
+    {
+        Vector2 rayPos = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
+        RaycastHit2D hit = Physics2D.Raycast(rayPos, Vector2.zero, 0f);
+
+        if (hit)
+        {
+            if (hit.transform.tag == "BuildTile")
+            {
+                if (hit.transform.gameObject.GetComponent<BuildTile>().builded)
+                {
+                    if (currentBuild == null)
+                    {
+                        currentBuild = hit.transform.gameObject.GetComponent<BuildTile>();
+                        currentBuild.curretTower.radiusVisible = true;
+                    }
+
+                    else if (hit.transform.gameObject != currentBuild.gameObject)
+                    {
+
+                        currentBuild.curretTower.radiusVisible = false;
+                        currentBuild = null;
+                    }
+                }
+                else
+                {
+                    if (currentBuild != null)
+                    {
+                        currentBuild.curretTower.radiusVisible = false;
+                        currentBuild = null;
+                    }
+                }
+            }
+
+            else if (currentBuild != null)
+            {
+                if (currentBuild.builded)
+                {
+                    currentBuild.curretTower.radiusVisible = false;
+                    currentBuild = null;
+                }
+
+            }
+        }
+    }
+
+
+    void HoverCheck()
+    {
+        Vector2 rayPos = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
+        RaycastHit2D hit = Physics2D.Raycast(rayPos, Vector2.zero, 0f);
+
+        if (hit)
+        {
+            if (hit.transform.tag == "Switch")
+            {
+                dialogo.SwitchInfo("Click here to modify the enemy's path\n\n\nCost: 50", true);
+            }
+
+            else dialogo.SwitchInfo(null, false);
+        }
+    }
+
+
+
+        }

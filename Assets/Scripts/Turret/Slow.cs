@@ -14,9 +14,10 @@ public class Slow : Turret {
 
     }
 
-    void Start()
-	{
-		pool = new SlowBullet[bulletPool.Length];
+    protected override void Start()
+    {
+        base.Start();
+        pool = new SlowBullet[bulletPool.Length];
 		
 		for (int i = 0; i< pool.Length; i++) 
 		{

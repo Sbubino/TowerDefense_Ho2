@@ -17,14 +17,17 @@ public class Spawnpoint : MonoBehaviour {
 		instance = this;
         if (open)
             GetComponent<SpriteRenderer>().sprite = sprites;
-        
 
+        GetComponent<BoxCollider2D>().isTrigger = true;
         WaveBuild();
 	}
 
 	void Update(){
-		if(open)
-            GameController.instance.WaveControl (wave.Length);
+        if (GuiController.instance.gameStarted)
+        {
+            if (open)
+                GameController.instance.WaveControl(wave.Length);
+        }
 	}
 
 

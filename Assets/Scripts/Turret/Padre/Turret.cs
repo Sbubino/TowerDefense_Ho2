@@ -11,12 +11,15 @@ public class Turret : MonoBehaviour {
     public GameObject m_BulletPrefab;
     public float m_Range;
     protected string extraInfo;
+    public int value;
    protected  string typeName;
     DialogoController dialogo;
-
+    GameObject radius;
 
     RaycastHit2D hit;
+    Upgrade up;
 
+   public bool radiusVisible;
     [HideInInspector]
     public bool canShoot = true;
    
@@ -38,8 +41,9 @@ public class Turret : MonoBehaviour {
 
     protected virtual void Awake()
 	{
+        up = GetComponent<Upgrade>();
         dialogo = FindObjectOfType<DialogoController>();
-
+        radius = transform.GetChild(2).gameObject;
         enemyInRange = new Collider2D[20];
         range = GetComponent<CircleCollider2D>();
         range.radius = m_Range;
@@ -57,10 +61,20 @@ public class Turret : MonoBehaviour {
 
 	void Update(){
 		timer += Time.deltaTime;
-       // canShoot = true;
+        // canShoot = true;
+        if (radiusVisible)
+            radius.transform.localScale = new Vector3(m_Range * 1.7f, m_Range * 1.7f, 0);
+        else
+            radius.transform.localScale = new Vector3(0, 0, 0);
+        if(!canShoot)
+            radius.transform.localScale = new Vector3(m_Range * 1.7f, m_Range * 1.7f, 0);
 
     }
 
+    protected virtual void Start()
+    {
+        SetBuildTile();
+    }
 
     void OnTriggerStay2D(Collider2D trig)
 	{
@@ -176,7 +190,8 @@ public class Turret : MonoBehaviour {
 
     public void UpInfo(bool builded)
     {
-        string info = typeName + " turret\n\n" + "Upgrade cost: " + CostUpgrade + "\n\nDamage: " + m_Damage + " > " + (m_Damage + 10) + "\n\nFire rate: " + m_FireRate + " > " + (m_FireRate + 10) + "\n\n\nSell for " + 10;
-        dialogo.SendMessage("TurretUpInfo", info);
+
+        string info = typeName + " turret\n\n" + "Upgrade cost: " + CostUpgrade + "\n\nDamage: " + m_Damage + " > " + (m_Damage + m_Damage*up.UpgradeDamage/100) + "\n\nFire rate: " + m_FireRate + " > " + (m_FireRate + m_FireRate*up.UpgradeFireRate/100) + "\n\n\nSell for " + 10;
+        dialogo.TurretUpInfo(info);
     }
 }

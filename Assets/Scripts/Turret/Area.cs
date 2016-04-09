@@ -14,8 +14,9 @@ public class Area : Turret {
         extraInfo = "\n\nBullets explode and hit more enemies";
     }
 
-    void Start()
+    protected override void Start()
 	{
+        base.Start();
 		pool = new AreaBullet[bulletPool.Length];
 		
 		for (int i = 0; i< pool.Length; i++) 

@@ -40,7 +40,8 @@ public class GuiController : MonoBehaviour {
 	public bool lose = false;
 
 	int waveLenght;
-	bool gameStarted;
+    [HideInInspector]
+    public bool gameStarted;
 	float timer = 0;
 
     DialogoController dialogo;
@@ -51,7 +52,7 @@ public class GuiController : MonoBehaviour {
 		instance = this;
         dialogo = FindObjectOfType<DialogoController>();
 
-        Time.timeScale = 0;
+       // Time.timeScale = 0;
 	  
 		gameStarted = false;
 		bossIcon.SetActive (false);
@@ -154,7 +155,7 @@ public class GuiController : MonoBehaviour {
 
         if (!gameStarted) {
 			gameStarted = true;
-			Time.timeScale = 1;
+			//Time.timeScale = 1;
 		}
 		
 	}
@@ -206,7 +207,7 @@ public class GuiController : MonoBehaviour {
 
 	public void Retry(){
 
-		Application.LoadLevel (Application.loadedLevelName);
+		Application.LoadLevel (Application.loadedLevel);
 	}
 
 
