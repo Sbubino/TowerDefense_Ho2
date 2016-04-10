@@ -11,7 +11,8 @@ public class Spawnpoint : MonoBehaviour {
 
 	int maxWaveNumber;
     public bool open;
-    public Sprite sprites; 
+    public Sprite sprites;
+  
 
 	void Awake(){
 		instance = this;
@@ -25,8 +26,9 @@ public class Spawnpoint : MonoBehaviour {
 	void Update(){
         if (GuiController.instance.gameStarted)
         {
-            if (open)
+            if (open)            
                 GameController.instance.WaveControl(wave.Length);
+            
         }
 	}
 
@@ -44,9 +46,7 @@ public class Spawnpoint : MonoBehaviour {
 	}
 
 
-	void WaveBuild(){
-        //riempio l'array wave con tutte le ondate in scena e imposto un valore wavetimer alto per far partire subuto la prima ondata al play
-
+	void WaveBuild(){       
 
         wave = new GameObject[waveHolder.transform.childCount];
 		for (int i = 0; i < waveHolder.transform.childCount; i++) {

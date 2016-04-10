@@ -302,20 +302,19 @@ public class GameController : MonoBehaviour {
 
 
 		if (localWaveIndex < waveLenght) {
-			for (int i = 1; i < spawnPoint.Length; i++) {
-				if (spawnPoint [0].activeSelf) {
-					spawnPoint [0].GetComponent<Spawnpoint> ().StartWave (localWaveIndex);
+			for (int i = 0; i < spawnPoint.Length; i++) {
+				/*if (spawnPoint [0].activeSelf) {
+					spawnPoint [0].GetComponent<Spawnpoint> ().StartWave (localWaveIndex);*/
 
 
-				if (spawnPoint [i].activeSelf) {
-					spawnPoint [i].GetComponent<Spawnpoint> ().StartWave (localWaveIndex);
-				}	
-
-					if (localWaveIndex < waveLenght - 1)
-					localWaveIndex++;
+				if (spawnPoint [i].activeSelf && spawnPoint[i].GetComponent<Spawnpoint>().open) 
+					spawnPoint [i].GetComponent<Spawnpoint> ().StartWave (localWaveIndex);				
 				}
-			}			
-		}
+
+            if (localWaveIndex < waveLenght - 1)
+                localWaveIndex += 1;
+        }			
+		
 	}
 
 	void SetNextWave(){
