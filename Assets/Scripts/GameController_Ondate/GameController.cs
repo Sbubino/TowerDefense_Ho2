@@ -283,13 +283,22 @@ public class GameController : MonoBehaviour {
 		}
 
 		//stabilisco la fine della partita 
-		if (indexWave > maxWaveNumber) {
-			if(GameObject.FindWithTag ("Enemy") == null)
-				GuiController.instance.win = true;
+		if (indexWave >= maxWaveNumber) {
+
+            StartCoroutine(EndGameControl());                  
+            
 		}
 	}
 
-	void StartNextWave(int waveLenght){			
+    IEnumerator EndGameControl()
+    {
+        yield return new WaitForSeconds(3);
+        if (GameObject.FindWithTag("Enemy") == null)
+            GuiController.instance.win = true;
+    }
+
+
+    void StartNextWave(int waveLenght){			
 
 
 		if (localWaveIndex < waveLenght) {
