@@ -8,6 +8,20 @@ public class Bullet : MonoBehaviour {
 	public float damage;
 	[HideInInspector]
 	public GameObject target;
+    protected float disableTime=0.5f;
+
+
+    protected virtual void OnEnable()
+    {
+        StopAllCoroutines();
+        StartCoroutine(Deactivate());
+    }
+
+    public IEnumerator Deactivate()
+    {
+        yield return new WaitForSeconds(disableTime);
+        gameObject.SetActive(false);
+    }
 
 
 

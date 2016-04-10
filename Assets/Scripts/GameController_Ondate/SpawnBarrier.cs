@@ -7,11 +7,12 @@ public class SpawnBarrier : MonoBehaviour {
 	public int minionForNextSpawnPoint;
 	[HideInInspector]
 	public int currentMinionPassed;
+    Animator piede;
 
 
 	void Awake () {
-		//spawnPoint.SetActive (false);	
-        
+        //spawnPoint.SetActive (false);	
+        piede = transform.GetChild(0).GetComponent<Animator>() ;
 	}
 
 	void Update(){
@@ -23,7 +24,17 @@ public class SpawnBarrier : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D col){
-		if (col.gameObject.tag == "Enemy")
-			currentMinionPassed ++;
+        if (col.gameObject.tag == "Enemy")
+        { currentMinionPassed++;
+            if (!piede.GetBool("Crossed"))
+               { piede.SetBool("Crossed", true);
+                Invoke("StopAnim", 0.5f); }
+        }
 	}
+
+    void StopAnim()
+    {
+        piede.SetBool("Crossed", false);
+
+    }
 }

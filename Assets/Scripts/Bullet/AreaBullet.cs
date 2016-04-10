@@ -18,8 +18,9 @@ public class AreaBullet : Bullet {
 		col = GetComponent<CircleCollider2D> ();
 	}
 
-	void OnEnable()
+	protected override void OnEnable()
 	{
+        base.OnEnable();
 		spriteExplosion.SetActive(false);
 		sprite.SetActive (true);
 		col.enabled = true;
@@ -35,7 +36,8 @@ public class AreaBullet : Bullet {
 	void OnTriggerEnter2D (Collider2D col)
 	{
 		if (col.gameObject.CompareTag ("Enemy")) 
-		{				
+		{
+            StopAllCoroutines();
 			Explode ();		
 			AudioController.instance.ChillyEfx();
 		}

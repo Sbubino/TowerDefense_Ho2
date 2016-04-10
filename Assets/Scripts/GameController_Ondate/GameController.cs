@@ -431,7 +431,7 @@ public class GameController : MonoBehaviour {
         {
             if (hit.transform.tag == "BuildTile")
             {
-                Debug.Log(hit.transform.gameObject);
+
 
                 if (hit.transform.gameObject.GetComponent<BuildTile>().builded)
                 {
