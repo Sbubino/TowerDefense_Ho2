@@ -16,7 +16,10 @@ public class MenuController : MonoBehaviour {
 
 	void Awake()
 	{
-		DontDestroyOnLoad(this);
+        Time.timeScale = 1;
+
+        DontDestroyOnLoad(this);
+
 	}
 
 	void Update()

@@ -15,6 +15,7 @@ public class LoadingScreen : MonoBehaviour {
 
 	void Awake()
 	{
+        Time.timeScale = 1;
 		Timer = Time.time + Timer;
 		LevelToLoad = MenuController.NumberOfLevel;
 		Destroy (GameObject.Find("MenuController"));

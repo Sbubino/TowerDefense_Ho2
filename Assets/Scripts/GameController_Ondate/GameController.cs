@@ -32,6 +32,8 @@ public class GameController : MonoBehaviour {
 	[HideInInspector]
 	public float waveTimer;
 
+    GameObject [] fatSprites=new GameObject[3];
+
     public DialogoController dialogo;
 
 
@@ -65,14 +67,19 @@ public class GameController : MonoBehaviour {
         //currentEnergy = maxEnergy;
         //currentEnergy = 300;
         waveTimer = nextWaveIn - 2;
-
-		//WaveBuild ();	
-		SpawnpointBuild ();
+        FatMan = FindObjectOfType<Core>().gameObject;
+        for (int i = 0; i < fatSprites.Length; i++)
+        {
+            fatSprites[i] = FatMan.transform.GetChild(i).gameObject;
+        }
+        //WaveBuild ();	
+        SpawnpointBuild ();
 	}
 	
 
 	void Update () {
         //WaveControl ();
+        changeSprite();
         if (GuiController.instance.gameStarted)
         {
             EnergyControl();
@@ -335,19 +342,34 @@ public class GameController : MonoBehaviour {
 
 	void changeSprite()
 	{
-		if(currentEnergy >= 150)
+		if(currentEnergy >= maxEnergy*4/5)
 		{
-			fatMan.sprite = CiccioneSprite[0];
+            //	fatMan.sprite = CiccioneSprite[0];
+            RefreshSprite(0);
 		}
-		if(currentEnergy <= 149)
+		else if(currentEnergy >= maxEnergy/5)
 		{
-			fatMan.sprite = CiccioneSprite[1];
-		}
-		if(currentEnergy <= 75)
-		{
-			fatMan.sprite = CiccioneSprite[2];
-		}
-	}
+            //fatMan.sprite = CiccioneSprite[1];
+            RefreshSprite(1);
+
+        }
+        else
+            //	fatMan.sprite = CiccioneSprite[2];
+            RefreshSprite(2);
+
+
+    }
+
+    void RefreshSprite(int p)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            if(j==p)
+                fatSprites[p].SetActive(true);
+            else
+            fatSprites[j].SetActive(false);
+        }
+    }
 
 
 
@@ -396,6 +418,8 @@ public class GameController : MonoBehaviour {
         {
             if (hit.transform.tag == "BuildTile")
             {
+                Debug.Log(hit.transform.gameObject);
+
                 if (hit.transform.gameObject.GetComponent<BuildTile>().builded)
                 {
                     if (currentBuild == null)

@@ -140,7 +140,7 @@ public class Enemy : MonoBehaviour {
     {        
         transform.position = spawn;
         nextTile = spawn;
-//        GameController.instance.LoseEnergy(banishmentCost);
+        GameController.instance.LoseEnergy(banishmentCost);
         
     }
 
