@@ -20,10 +20,12 @@ public class GuiController : MonoBehaviour {
 
 	public UILabel waveNuber;
 	public UILabel waveTimer;
-	public GameObject bossIcon;
-	public GameObject normalIcon;
+    public GameObject nextwavein;
+    public GameObject wavenumbert;
+    public GameObject waveInvoke;
+    public GameObject startGamet;
 
-	public GameObject nextWave;
+    public GameObject nextWave;
 
 	public GameObject pauseScreen;
 	public GameObject winScreen;
@@ -53,8 +55,7 @@ public class GuiController : MonoBehaviour {
 
        Time.timeScale = 1;
 	  
-		gameStarted = false;
-		bossIcon.SetActive (false);
+		gameStarted = false;		
 
 		play.SetActive (false);
 		xx2.SetActive (false);
@@ -62,7 +63,13 @@ public class GuiController : MonoBehaviour {
 		pauseScreen.SetActive (false);
 		winScreen.SetActive (false);
 		loseScreen.SetActive (false);
-	}
+
+
+        nextwavein.SetActive(false);
+        wavenumbert.SetActive(false);
+        waveInvoke.SetActive(false);
+        startGamet.SetActive(true);
+}
 
 	void Update () {
 
@@ -73,18 +80,17 @@ public class GuiController : MonoBehaviour {
 
 	}
 
-	void TakeNextWave(){
-		
-		/*if (GameObject.FindWithTag ("Boss") != null) {
-			normalIcon.SetActive (false);
-			bossIcon.SetActive (true);
-		}*/
+    void TakeNextWave() {
 
-		waveLenght = Spawnpoint.instance.wave.Length - waveIndex;
-		waveNuber.text =  waveLenght.ToString();
 
-		if (!gameStarted)
-			waveTimer.text = null;
+        waveLenght = Spawnpoint.instance.wave.Length - waveIndex;
+        waveNuber.text = waveLenght.ToString();
+
+        if (!gameStarted) { 
+        waveTimer.text = null;
+        waveNuber.text = null;
+         }
+        
 		else			
 		    waveTimer.text = (Mathf.RoundToInt( GameController.instance.nextWaveIn) - Mathf.RoundToInt (GameController.instance.waveTimer)).ToString ();
 	
@@ -157,8 +163,14 @@ public class GuiController : MonoBehaviour {
 
         if (!gameStarted) {
 			gameStarted = true;
-			//Time.timeScale = 1;
-		}
+           
+
+            nextwavein.SetActive(true);
+            wavenumbert.SetActive(true);
+            waveInvoke.SetActive(true);
+            startGamet.SetActive(false);
+            //Time.timeScale = 1;
+        }
 		
 	}
 		
