@@ -18,12 +18,12 @@ public class GuiController : MonoBehaviour {
 
 	public GameObject NextWaveFlash;
 
+    public GameObject lastWave;
 	public UILabel waveNuber;
 	public UILabel waveTimer;
     public GameObject nextwavein;
-    public GameObject wavenumbert;
-    public GameObject waveInvoke;
-    public GameObject startGamet;
+    public GameObject wavenumbert;   
+    public UILabel startGamet;
 
     public GameObject nextWave;
 
@@ -67,8 +67,7 @@ public class GuiController : MonoBehaviour {
 
         nextwavein.SetActive(false);
         wavenumbert.SetActive(false);
-        waveInvoke.SetActive(false);
-        startGamet.SetActive(true);
+        lastWave.SetActive(false);
 }
 
 	void Update () {
@@ -84,16 +83,27 @@ public class GuiController : MonoBehaviour {
 
 
         waveLenght = Spawnpoint.instance.wave.Length - waveIndex;
-        waveNuber.text = waveLenght.ToString();
+
+        if (waveLenght == 0)
+        {
+            waveNuber.text = null;
+            waveTimer.text = null;
+
+            nextwavein.SetActive(false);
+            wavenumbert.SetActive(false);
+
+            lastWave.SetActive(true);
+        }
+
+        else {
+            waveNuber.text = waveLenght.ToString();
+            waveTimer.text = (Mathf.RoundToInt(GameController.instance.nextWaveIn) - Mathf.RoundToInt(GameController.instance.waveTimer)).ToString();
+        }
 
         if (!gameStarted) { 
-        waveTimer.text = null;
-        waveNuber.text = null;
+            waveTimer.text = null;
+            waveNuber.text = null;
          }
-        
-		else			
-		    waveTimer.text = (Mathf.RoundToInt( GameController.instance.nextWaveIn) - Mathf.RoundToInt (GameController.instance.waveTimer)).ToString ();
-	
 
 	}
 
@@ -162,13 +172,12 @@ public class GuiController : MonoBehaviour {
 
 
         if (!gameStarted) {
-			gameStarted = true;
-           
+			gameStarted = true;           
 
             nextwavein.SetActive(true);
-            wavenumbert.SetActive(true);
-            waveInvoke.SetActive(true);
-            startGamet.SetActive(false);
+            wavenumbert.SetActive(true);           
+            startGamet.text = null;
+
             //Time.timeScale = 1;
         }
 		
