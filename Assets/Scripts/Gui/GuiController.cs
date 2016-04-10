@@ -148,8 +148,11 @@ public class GuiController : MonoBehaviour {
 
         float amount = (Mathf.RoundToInt(GameController.instance.nextWaveIn) - Mathf.RoundToInt(GameController.instance.waveTimer));
 
-        GameController.instance.waveTimer += 100;
-        GameController.instance.currentEnergy += amount;
+        if (GameController.instance.indexWave <= GameController.instance.maxWaveNumber)
+        {
+            GameController.instance.waveTimer += 100;
+            GameController.instance.currentEnergy += amount;
+        }
 
 
         if (!gameStarted) {

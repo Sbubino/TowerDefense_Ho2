@@ -27,22 +27,26 @@ public class GameController : MonoBehaviour {
 	public float nextEnergyValueDecrease;
 	public float moltiplicatoreEnergy;
 	public int maxEnergy;
+
 	//[HideInInspector]
 	public float currentEnergy;
 	[HideInInspector]
 	public float waveTimer;
+    [HideInInspector]
+    public int indexWave = 0;
 
     GameObject [] fatSprites=new GameObject[3];
 
     public DialogoController dialogo;
 
+    
 
     GameObject SpawnHolder;
 	GameObject[] spawnPoint;
 	GameObject waveHolder;
 	GameObject[] wave;
 	int nextWaveControl = 0;
-	int indexWave = 0;
+
 	int localWaveIndex = 0;
 
     bool multiplierSelected = false;
@@ -279,7 +283,7 @@ public class GameController : MonoBehaviour {
 		}
 
 		//stabilisco la fine della partita 
-		if (indexWave >= maxWaveNumber) {
+		if (indexWave > maxWaveNumber) {
 			if(GameObject.FindWithTag ("Enemy") == null)
 				GuiController.instance.win = true;
 		}
