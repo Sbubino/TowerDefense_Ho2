@@ -18,7 +18,7 @@ public class AudioController : MonoBehaviour {
 			instance = this;
 		}
 		DontDestroyOnLoad (this.gameObject);
-
+		MenuTrack();
 	}
 
 	// Use this for initialization
@@ -28,10 +28,6 @@ public class AudioController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetKeyDown(KeyCode.Alpha1))
-		{
-			WinTrack();
-		}
 
 	}
 	public static AudioController GetInstance()
