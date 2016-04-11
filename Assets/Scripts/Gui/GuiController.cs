@@ -124,14 +124,19 @@ public class GuiController : MonoBehaviour {
 
 		}
 
-	}
+        if (!gameStarted)
+            pauseScreen.SetActive(true);
 
-	public void Play(){
-		if (gameStarted) {
-			Time.timeScale = 1;		
+    }
 
-			play.SetActive (false);
-			pause.SetActive (true);
+    public void Play()
+    {
+        if (gameStarted)
+        {
+            Time.timeScale = 1;
+
+            play.SetActive(false);
+            pause.SetActive(true);
 
             if (xx2.activeSelf)
             {
@@ -141,11 +146,14 @@ public class GuiController : MonoBehaviour {
             }
 
 
-            pauseScreen.SetActive (false);
+            pauseScreen.SetActive(false);
 
-		
-		}
-	}
+
+        }
+
+        if (!gameStarted)
+            pauseScreen.SetActive(false);
+    }
 
 
 	public void X2 (){
