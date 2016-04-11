@@ -104,11 +104,15 @@ public class BuildTurret : MonoBehaviour {
     }
 
 
-	public void BuildTower(GameObject button){
-		string names = button.name;
-		Vector3 mousePos =  Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    public void BuildTower(GameObject button) {
+        string names = button.name;
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-		positioned = false;
+        positioned = false;
+
+        if (currentTurret != null)
+        { currentTurret.SetActive(false);
+        currentTurret = null; }
 
         if (names == "Fast" && GameController.instance.currentEnergy >= buttonTurret[0].GetComponent<Turret>().CostBuild)
         {
