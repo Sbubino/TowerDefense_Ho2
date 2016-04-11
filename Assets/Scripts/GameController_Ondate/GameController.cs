@@ -359,7 +359,7 @@ public class GameController : MonoBehaviour {
             //	fatMan.sprite = CiccioneSprite[0];
             RefreshSprite(0);
 		}
-		else if(currentEnergy >= maxEnergy/5)
+		else if(currentEnergy >= maxEnergy/20)
 		{
             //fatMan.sprite = CiccioneSprite[1];
             RefreshSprite(1);

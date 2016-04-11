@@ -65,14 +65,22 @@ public class BuildTile : MonoBehaviour {
 
     public void UpGrade(){
      
-        if (turretUp.Liv < 2 && GameController.instance.currentEnergy >= curretTower.CostUpgrade ) {
-            Debug.Log("costo up " + curretTower.CostUpgrade);
-            GameController.instance.LoseEnergy(curretTower.CostUpgrade);
-            turretUp.LevelUp();
-           
-			GameController.instance.CloseMenu();            	
+        if (turretUp.Liv < 2) {
+            if (GameController.instance.currentEnergy >= curretTower.CostUpgrade)
+            {
+                Debug.Log("costo up " + curretTower.CostUpgrade);
+                GameController.instance.LoseEnergy(curretTower.CostUpgrade);
+                turretUp.LevelUp();
+
+                GameController.instance.CloseMenu();
+                dialogo.Reset();
+            }
+            else dialogo.GeneralInfo("You don't have enough energy to upgrade this turret\n\n\nCost: " + curretTower.CostUpgrade);
 		}
-	}
+        else dialogo.GeneralInfo("This turret has reached the maximum level!");
+
+
+    }
     
 
 	public void Sell(){
