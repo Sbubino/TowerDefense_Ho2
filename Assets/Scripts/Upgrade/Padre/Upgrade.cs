@@ -37,7 +37,7 @@ public class Upgrade : MonoBehaviour
 
         damagePercent = UpgradeDamage / 100;
         fireRatePercent = UpgradeFireRate / 100;
-        rangePercent = UpgradeFireRate / 100;
+        rangePercent = UpgradeRange / 100;
         costPercent = UpgradeCost / 100;
     }
 
@@ -47,7 +47,7 @@ public class Upgrade : MonoBehaviour
         {
             turret.m_Damage +=  turret.m_Damage * damagePercent;
             turret.m_FireRate += turret.m_FireRate * fireRatePercent;
-            turret.m_Range += turret.m_Range * rangePercent;
+			turret.m_Range += turret.m_Range * rangePercent;
             turret.setRange(turret.m_Range);
             turret.CostUpgrade += turret.CostUpgrade * costPercent;
 

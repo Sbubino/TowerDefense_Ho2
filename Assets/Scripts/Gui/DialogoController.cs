@@ -29,7 +29,7 @@ public  class DialogoController : MonoBehaviour {
             {
                 dialog.text = info;
                 onSwitch = true;
-                Debug.Log("on");
+//                Debug.Log("on");
             }
             else if (onSwitch)
             {

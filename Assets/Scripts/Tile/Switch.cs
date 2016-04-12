@@ -123,7 +123,7 @@ public class Switch : Tile {
                     {
                         checkDistance = true;
 
-                        Debug.Log("tile problema Switch " + positionNextTile[i]);
+//                        Debug.Log("tile problema Switch " + positionNextTile[i]);
                         positionNextTile[i].SendMessage("SetDistanceCore", distanceToCore);
                     }
 
@@ -171,25 +171,25 @@ public class Switch : Tile {
             if (path2.transform.position.y > transform.position.y)
             {
                 ActivateSprites(0);
-                Debug.Log("a");
+               // Debug.Log("a");
 
             }
             else if (path2.transform.position.y < transform.position.y)
             {
                 ActivateSprites(2);
-                Debug.Log("1b");
+              //  Debug.Log("1b");
 
             }
            else  if (path2.transform.position.x > transform.position.x)
             {
                 ActivateSprites(1);
-                Debug.Log("1c");
+             //   Debug.Log("1c");
 
             }
            else if (path2.transform.position.x < transform.position.x)
             {
                 ActivateSprites(3);
-                Debug.Log("1d");
+              //  Debug.Log("1d");
 
             }
 
@@ -213,7 +213,7 @@ public class Switch : Tile {
             else if (path1.transform.position.x < transform.position.x)
             {
                 ActivateSprites(3);
-                Debug.Log("1d");
+              //  Debug.Log("1d");
 
             }
 

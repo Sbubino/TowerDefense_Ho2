@@ -22,8 +22,8 @@ public class BuildTile : MonoBehaviour {
 
     void Update()
     {
-        if (curretTower != null)
-            Debug.Log("Build + " + transform.name + "Torre + " + turretUp.transform.name);
+  //      if (curretTower != null)
+//            Debug.Log("Build + " + transform.name + "Torre + " + turretUp.transform.name);
 
        
     }
@@ -87,6 +87,7 @@ public class BuildTile : MonoBehaviour {
 	GameController.instance.TakeEnergy (curretTower.value);
         curretTower.gameObject.SetActive(false);
         builded = false;
+		GameController.instance.CloseMenu ();
 	}
 
 

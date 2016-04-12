@@ -25,18 +25,23 @@ public class Turret : MonoBehaviour {
    
 
     //Variabili TorreInterne
-    float timer;
+	[HideInInspector]
+	public float timer;
     CircleCollider2D range;
 
+
 	//Variabili per SetTArget()
-	Collider2D[] enemyInRange;
-	GameObject target;
+	[HideInInspector]
+	public Collider2D[] enemyInRange;
+	[HideInInspector]
+	public GameObject target;
 	
 
 	//Variabili per Shoot();
 	[HideInInspector]
 	public GameObject[] bulletPool;
-	int bulletPoolIndex;
+	[HideInInspector]
+	public int bulletPoolIndex;
 
 
     protected virtual void Awake()
@@ -68,7 +73,6 @@ public class Turret : MonoBehaviour {
             radius.transform.localScale = new Vector3(0, 0, 0);
         if(!canShoot)
             radius.transform.localScale = new Vector3(m_Range * 1.7f, m_Range * 1.7f, 0);
-
     }
 
     protected virtual void Start()
@@ -100,7 +104,7 @@ public class Turret : MonoBehaviour {
 		
 	}
 
-	void SetTarget()
+	public void SetTarget()
 	{
 
         Physics2D.OverlapCircleNonAlloc(transform.position, range.radius - 0.5f, enemyInRange,m_EnemyLayer);
@@ -122,7 +126,7 @@ public class Turret : MonoBehaviour {
 	}
 
 
-	void CancelEnemyArray(Collider2D target)
+	public void CancelEnemyArray(Collider2D target)
 	{
 		for (int i = 0; i < enemyInRange.Length; i++) 
 		{
@@ -138,7 +142,7 @@ public class Turret : MonoBehaviour {
 	}
 
 
-	void Shoot()
+	public virtual void Shoot()
 	{
 		if (target != null && target.activeInHierarchy) 
 		{

@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour {
     GameObject lastTurret;
     float timer;
     bool isSlow;
+	GameObject morte;
 
 
 
@@ -38,7 +39,7 @@ public class Enemy : MonoBehaviour {
             sprites[i] = transform.GetChild(i).gameObject;
         }
         
-
+		morte = transform.FindChild ("Morte").gameObject;
 
 
     }
@@ -57,11 +58,11 @@ public class Enemy : MonoBehaviour {
 
     void OnEnable()
     {
-
         currentLife = m_MaxLife;
         spawn = transform.position;
-
     }
+
+
 
     public string SendInfo()
     {
@@ -131,6 +132,13 @@ public class Enemy : MonoBehaviour {
     {
         currentLife -= amount;
 		if(currentLife <= 0){ 
+			for(int i = 0; i< sprites.Length; i++)
+			{
+				sprites[i].SetActive(false);
+			}
+			
+			morte.SetActive(true);
+			transform.DetachChildren();
 			this.gameObject.SetActive(false);
 			GameController.instance.TakeEnergy(AddEnergy);
 		}
@@ -169,10 +177,7 @@ public class Enemy : MonoBehaviour {
 		Speed *= slow [0];
     }
 
-    void OnDisable()
-    {
-   //     GameController.instance.TakeEnergy(AddEnergy);
-    }
+    
 
     void ChangeSprites()
     {

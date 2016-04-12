@@ -27,8 +27,9 @@ public class Bullet : MonoBehaviour {
 
 	public virtual void FixedUpdate()
 	{
-		if(target != null)
-			transform.position = Vector2.Lerp(transform.position, target.transform.position, m_Speed * Time.deltaTime);
+		if (target != null) {
+			transform.position = Vector2.Lerp (transform.position, target.transform.position, m_Speed * Time.deltaTime / Vector2.Distance(transform.position , target.transform.position));
+		}
 	}
 
 	public void SetDamage(float amount)

@@ -254,7 +254,7 @@ public class GameController : MonoBehaviour {
     }
 
 	public void Upgrade(){
-        Debug.Log("UpgradePerJesoo");
+        
         currentTile.SendMessage("UpGrade");
 
 	}
