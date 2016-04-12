@@ -130,8 +130,8 @@ public class GameController : MonoBehaviour {
             else
             {
                 moltiplicatoreEnergy *= 1.1f;
-                maxEnergy = (int)Mathf.Round(maxEnergy * 1.2f);
                 currentEnergy = currentEnergy - energyMultCost * maxEnergy;
+                maxEnergy = (int)Mathf.Round(maxEnergy * 1.2f);
                 dialogo.Reset();
                 StopAllCoroutines();
                 Debug.Log("ene");
