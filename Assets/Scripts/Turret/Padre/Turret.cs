@@ -195,7 +195,7 @@ public class Turret : MonoBehaviour {
     public void UpInfo(bool builded)
     {
 
-        string info = typeName + " turret\n\n" + "Upgrade cost: " + CostUpgrade + "\n\nDamage: " + m_Damage + " > " + (m_Damage + m_Damage*up.UpgradeDamage/100) + "\n\nFire rate: " + m_FireRate + " > " + (m_FireRate + m_FireRate*up.UpgradeFireRate/100) + "\n\n\nSell for " + 10;
+        string info = typeName + " turret\n\n" + "Upgrade cost: " + System.Math.Round( CostUpgrade , 2) + "\n\nDamage: " + System.Math.Round(m_Damage , 2) + " > " + System.Math.Round( (m_Damage + m_Damage*up.UpgradeDamage/100) , 2) + "\n\nFire rate: " + System.Math.Round(m_FireRate , 2) + " > " + System.Math.Round( (m_FireRate + m_FireRate*up.UpgradeFireRate/100) ,2)  + "\n\n\nSell for " + 10;
         dialogo.TurretUpInfo(info);
     }
 }
