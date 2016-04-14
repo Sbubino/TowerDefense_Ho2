@@ -175,7 +175,7 @@ public class GuiController : MonoBehaviour {
         if (GameController.instance.indexWave <= GameController.instance.maxWaveNumber)
         {
             GameController.instance.waveTimer += 100;
-            GameController.instance.currentEnergy += amount;
+            GameController.instance.currentEnergy += amount*2;
         }
 
 

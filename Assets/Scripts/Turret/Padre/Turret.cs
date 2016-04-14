@@ -15,6 +15,7 @@ public class Turret : MonoBehaviour {
    protected  string typeName;
     DialogoController dialogo;
     GameObject radius;
+    public GameObject shineSprite;
 
     RaycastHit2D hit;
     Upgrade up;
@@ -73,6 +74,17 @@ public class Turret : MonoBehaviour {
             radius.transform.localScale = new Vector3(0, 0, 0);
         if(!canShoot)
             radius.transform.localScale = new Vector3(m_Range * 1.7f, m_Range * 1.7f, 0);
+
+
+        if (GameController.instance.currentEnergy >= CostUpgrade)
+        {
+            shineSprite.SetActive(true);
+            shineSprite.transform.Rotate(0, 0, 10 * Time.deltaTime);
+        }
+        else
+        {
+            shineSprite.SetActive(false);
+        }
     }
 
     protected virtual void Start()
