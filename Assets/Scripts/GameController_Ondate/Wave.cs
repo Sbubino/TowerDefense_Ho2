@@ -29,7 +29,7 @@ public class Wave : MonoBehaviour {
 		activator++;
 		spawnPoint = spawn;
 
-		GuiController.instance.waveIndex++;
+	//	GuiController.instance.waveIndex++;
 	}
 
 	void GetChildInArray (){
