@@ -98,7 +98,6 @@ public class GameController : MonoBehaviour {
         RadiusCheck();
         HoverCheck();
 
-        SetNextWave();
 
         if (openMenu && Input.GetMouseButtonDown(0))
         {
@@ -274,7 +273,7 @@ public class GameController : MonoBehaviour {
 		//gestione dei due metodi precedenti
 		maxWaveNumber = waveLenght;
 
-		//SetNextWave();
+		SetNextWave();
 
 		if (indexWave <= waveLenght) {
 			if (nextWaveControl < indexWave) {
@@ -311,8 +310,6 @@ public class GameController : MonoBehaviour {
 				if (spawnPoint [i].activeSelf && spawnPoint[i].GetComponent<Spawnpoint>().open) 
 					spawnPoint [i].GetComponent<Spawnpoint> ().StartWave (localWaveIndex);				
 				}
-
-           GuiController.instance.waveIndex++;
 
             if (localWaveIndex < waveLenght - 1)
                 localWaveIndex += 1;

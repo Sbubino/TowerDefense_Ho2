@@ -75,8 +75,9 @@ public class GuiController : MonoBehaviour {
 		EnergyBar ();
 		FlashWave ();
 		TakeNextWave ();
-		EndLevel ();
-    }
+		EndLevel ();	
+
+	}
 
     void TakeNextWave() {
 
@@ -106,32 +107,7 @@ public class GuiController : MonoBehaviour {
 
 	}
 
-    public void NextWavebutton()
-    {
-
-        float amount = (Mathf.RoundToInt(GameController.instance.nextWaveIn) - Mathf.RoundToInt(GameController.instance.waveTimer));
-
-        if (GameController.instance.indexWave <= GameController.instance.maxWaveNumber)
-        {
-            GameController.instance.waveTimer += 100;
-            GameController.instance.currentEnergy += amount * 2;
-        }
-
-
-        if (!gameStarted)
-        {
-            gameStarted = true;
-
-            nextwavein.SetActive(true);
-            wavenumbert.SetActive(true);
-            startGamet.text = null;
-
-            //Time.timeScale = 1;
-        }
-
-    }
-
-    void EnergyBar(){
+	void EnergyBar(){
 		energyValue.text = "" + GameController.instance.currentEnergy + " / " + GameController.instance.maxEnergy;
 		energyBar.value = GameController.instance.currentEnergy / GameController.instance.maxEnergy;
 	}
@@ -192,7 +168,28 @@ public class GuiController : MonoBehaviour {
 	}
 
 
-	
+	public void NextWavebutton(){
+
+        float amount = (Mathf.RoundToInt(GameController.instance.nextWaveIn) - Mathf.RoundToInt(GameController.instance.waveTimer));
+
+        if (GameController.instance.indexWave <= GameController.instance.maxWaveNumber)
+        {
+            GameController.instance.waveTimer += 100;
+            GameController.instance.currentEnergy += amount*2;
+        }
+
+
+        if (!gameStarted) {
+			gameStarted = true;           
+
+            nextwavein.SetActive(true);
+            wavenumbert.SetActive(true);           
+            startGamet.text = null;
+
+            //Time.timeScale = 1;
+        }
+		
+	}
 		
 
 	void FlashWave(){
