@@ -98,7 +98,9 @@ public class GameController : MonoBehaviour {
         RadiusCheck();
         HoverCheck();
 
-        SetNextWave();
+        if (GuiController.instance.gameStarted)        
+            SetNextWave();
+        
 
         if (openMenu && Input.GetMouseButtonDown(0))
         {
