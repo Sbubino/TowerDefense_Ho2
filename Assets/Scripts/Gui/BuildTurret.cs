@@ -83,7 +83,8 @@ public class BuildTurret : MonoBehaviour {
         if (hit != false && currentTurret != null && !positioned )
         {
             //la torretta segue il mouse
-            currentTurret.transform.position = hit.transform.gameObject.transform.position;         
+            if(hit.collider.gameObject.GetComponent<BuildTile>().builded == false)
+                currentTurret.transform.position = hit.transform.gameObject.transform.position;         
 
             //posiziono la torretta nella build tile
             if (Input.GetMouseButtonDown(0) && hit.collider.gameObject.GetComponent<BuildTile>().builded == false)

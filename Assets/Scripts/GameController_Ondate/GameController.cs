@@ -70,7 +70,7 @@ public class GameController : MonoBehaviour {
 
         //currentEnergy = maxEnergy;
         //currentEnergy = 300;
-        waveTimer = nextWaveIn - 2;
+        waveTimer = nextWaveIn;
         FatMan = FindObjectOfType<Core>().gameObject;
         for (int i = 0; i < fatSprites.Length; i++)
         {
@@ -232,7 +232,7 @@ public class GameController : MonoBehaviour {
 	void WaveBuild(){
 		//riempio l'array wave con tutte le ondate in scena e imposto un valore wavetimer alto per far partire subuto la prima ondata al play
 
-		waveTimer = 100;
+		//waveTimer = 100;
 		waveHolder = GameObject.FindGameObjectWithTag ("Wave");
 		wave = new GameObject[waveHolder.transform.childCount];
 		for (int i = 0; i < waveHolder.transform.childCount; i++) {

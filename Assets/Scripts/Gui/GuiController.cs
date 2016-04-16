@@ -45,6 +45,8 @@ public class GuiController : MonoBehaviour {
     public bool gameStarted;
 	float timer = 0;
 
+    float nextWaveTimer;
+
     DialogoController dialogo;
 
 
@@ -53,9 +55,11 @@ public class GuiController : MonoBehaviour {
 		instance = this;
         dialogo = FindObjectOfType<DialogoController>();
 
-       Time.timeScale = 1;
-	  
-		gameStarted = false;		
+        Time.timeScale = 1;
+
+        nextWaveTimer = 10;
+
+        gameStarted = false;		
 
 		play.SetActive (false);
 		xx2.SetActive (false);
@@ -76,12 +80,15 @@ public class GuiController : MonoBehaviour {
 		FlashWave ();
 		TakeNextWave ();
 		EndLevel ();
+
     }
 
     void TakeNextWave() {
 
 
         waveLenght = Spawnpoint.instance.wave.Length - waveIndex;
+
+        nextWaveTimer += Time.deltaTime;
 
         if (waveLenght == 0)
         {
@@ -108,26 +115,33 @@ public class GuiController : MonoBehaviour {
 
     public void NextWavebutton()
     {
+       
+            if (nextWaveTimer >= 5)
+            {
 
-        float amount = (Mathf.RoundToInt(GameController.instance.nextWaveIn) - Mathf.RoundToInt(GameController.instance.waveTimer));
+                float amount = (Mathf.RoundToInt(GameController.instance.nextWaveIn) - Mathf.RoundToInt(GameController.instance.waveTimer));
 
-        if (GameController.instance.indexWave <= GameController.instance.maxWaveNumber)
-        {
-            GameController.instance.waveTimer += 100;
-            GameController.instance.currentEnergy += amount * 2;
-        }
+                if (GameController.instance.indexWave <= GameController.instance.maxWaveNumber)
+                {
+                    GameController.instance.waveTimer += GameController.instance.nextWaveIn;
+                    GameController.instance.currentEnergy += amount * 2;
+                }
 
+                nextWaveTimer = 0;
+            }
+        
 
-        if (!gameStarted)
-        {
-            gameStarted = true;
+         if (!gameStarted)
+            {
+                gameStarted = true;
 
-            nextwavein.SetActive(true);
-            wavenumbert.SetActive(true);
-            startGamet.text = null;
+                nextwavein.SetActive(true);
+                wavenumbert.SetActive(true);
+                startGamet.text = null;
 
-            //Time.timeScale = 1;
-        }
+                //Time.timeScale = 1;
+            }
+        
 
     }
 
@@ -180,6 +194,7 @@ public class GuiController : MonoBehaviour {
     }
 
 
+
 	public void X2 (){
 		if (gameStarted) {
 			Time.timeScale = 2;
@@ -190,8 +205,6 @@ public class GuiController : MonoBehaviour {
 			//play.SetActive (true);
 		}
 	}
-
-
 	
 		
 
